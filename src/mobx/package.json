@@ -1,0 +1,6 @@
+{
+  "private": true,
+  "dependencies": {
+    "mobx": "^5.15.4"
+  }
+}

@@ -4,8 +4,8 @@ const merge = require("webpack-merge");
 const baseConfig = require("./webpack.config.base");
 
 
-module.exports = merge(baseConfig, {
-  entry: "./src/redux/v1/index.js",
+module.exports = (env) => merge(baseConfig, {
+  entry: `./src/${env.type}/${env.version}/index.js`,
   devServer: {
     historyApiFallback: true,
     open: true,

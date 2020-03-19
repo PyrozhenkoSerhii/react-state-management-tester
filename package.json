@@ -4,8 +4,14 @@
   "description": "An app to help developers to choose right state management approach for their current project",
   "main": "index.js",
   "scripts": {
-    "client-build": "webpack --env=prod --node production",
-    "server-dev": "nodemon --exec babel-node ./server/index.js"
+    "project-init": "npm i && cd src/redux && npm i && cd ../mobx && npm i",
+    "client-build": "webpack --config webpack.config.prod.js --mode production",
+    "client-dev-redux-v1": "webpack-dev-server --config webpack.config.dev.js --env.type=redux --env.version=v1",
+    "client-dev-redux-v2": "webpack-dev-server --config webpack.config.dev.js --env.type=redux --env.version=v2",
+    "client-dev-mobx-v1": "webpack-dev-server --config webpack.config.dev.js --env.type=mobx --env.version=v1",
+    "client-dev-context-v1": "webpack-dev-server --config webpack.config.dev.js --env.type=context --env.version=v1",
+    "server-dev": "nodemon --exec babel-node ./server/index.js",
+    "lint": "eslint src"
   },
   "keywords": [],
   "author": "Serhii Pyrozhenko",
