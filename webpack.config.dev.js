@@ -5,7 +5,7 @@ const baseConfig = require("./webpack.config.base");
 
 
 module.exports = (env) => merge(baseConfig, {
-  entry: `./src/${env.type}/${env.version}/index.js`,
+  entry: `./src/${env.type}/${env.version}/index.tsx`,
   devServer: {
     historyApiFallback: true,
     open: true,

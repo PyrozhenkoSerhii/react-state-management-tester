@@ -6,10 +6,10 @@ const baseConfig = require("./webpack.config.base");
 
 module.exports = merge(baseConfig, {
   entry: {
-    "redux/v1": "./src/redux/v1/index.js",
-    "redux/v2": "./src/redux/v2/index.js",
-    "mobx/v1": "./src/mobx/v1/index.js",
-    "context/v1": "./src/context/v1/index.js",
+    "redux/v1": "./src/redux/v1/index.tsx",
+    "redux/v2": "./src/redux/v2/index.tsx",
+    "mobx/v1": "./src/mobx/v1/index.tsx",
+    "context/v1": "./src/context/v1/index.tsx",
   },
   output: {
     path: path.resolve(__dirname, "./dist"),
