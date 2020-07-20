@@ -5,21 +5,27 @@ const webpack = require("webpack");
 
 module.exports = {
   target: "web",
+  resolve: {
+    extensions: [".tsx", ".ts", ".js", ".jsx", ".json"],
+  },
   module: {
     rules: [
       {
         test: /\.(ts|tsx)$/,
-        loader: "awesome-typescript-loader",
-      },
-      {
-        enforce: "pre",
-        test: /\.js$/,
-        loader: "source-map-loader",
+        loader: "ts-loader",
       },
       {
         test: /\.(eot|ttf|woff2?|otf|png|jpe?g|gif|svg)$/,
         use: [
           "file-loader",
+        ],
+      },
+      {
+        test: /\.less$/,
+        use: [
+          "style-loader",
+          "css-loader",
+          "less-loader",
         ],
       },
     ],

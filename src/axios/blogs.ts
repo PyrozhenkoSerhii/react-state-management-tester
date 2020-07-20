@@ -1,16 +1,22 @@
 import { instance } from "./api";
+import { IAxiosResponse } from "../interfaces/AxiosResponse";
 import { IBlog } from "../interfaces/Blog";
-
 
 const defaultError = "Unknown error on the server";
 
 export const blogsAPI = {
-  fetchBlogList: async (): Promise<Array<IBlog>> => {
+  fetchBlogList: async (): Promise<IAxiosResponse<Array<IBlog>>> => {
     try {
       const response = await instance.get<Array<IBlog>>("/blogs/list");
-      return response.data;
+      return {
+        data: response.data,
+        error: null,
+      };
     } catch (error) {
-      return error?.message || defaultError;
+      return {
+        data: null,
+        error: error.message || defaultError,
+      };
     }
   },
   deleteBlog: async (id: number | string): Promise<string> => {

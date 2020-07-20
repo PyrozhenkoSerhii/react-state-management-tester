@@ -1,22 +1,29 @@
+import { createContext } from "react";
+
 import { observable, action, flow } from "mobx";
 
 import { blogsAPI } from "../../../axios/blogs";
 
 import { IBlog } from "../../../interfaces/Blog";
 import { IBlogComment } from "../../../interfaces/Comment";
+import { IAxiosResponse } from "../../../interfaces/AxiosResponse";
 
-export class BlogListState {
+class BlogListState {
   @observable blogs: IBlog[];
-
-  @observable error = false;
 
   @observable loading = false;
 
+  @observable error: string | null = null;
+
+
   fetchBlogList = flow(function* fetch() {
     this.loading = true;
+    this.error = false;
 
-    const blogs = yield blogsAPI.fetchBlogList();
-    this.blogs = blogs;
+    const { data, error }: IAxiosResponse<Array<IBlog>> = yield blogsAPI.fetchBlogList();
+
+    this.blogs = data;
+    this.error = error;
     this.loading = false;
   })
 
@@ -49,4 +56,4 @@ export class BlogListState {
   }
 }
 
-export const blogListState = new BlogListState();
+export const blogListState = createContext(new BlogListState());
