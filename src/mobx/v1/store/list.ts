@@ -1,6 +1,6 @@
-import { observable, action, runInAction } from "mobx";
+import { observable, action, flow } from "mobx";
 
-import { blogsAPI } from "../../../axios/api";
+import { blogsAPI } from "../../../axios/blogs";
 
 import { IBlog } from "../../../interfaces/Blog";
 import { IBlogComment } from "../../../interfaces/Comment";
@@ -12,22 +12,13 @@ export class BlogListState {
 
   @observable loading = false;
 
-  @action fetchBlogs = async (): void => {
+  fetchBlogList = flow(function* fetch() {
     this.loading = true;
-    try {
-      const blogsPromise = await blogsAPI.getBlogList();
 
-      runInAction(() => {
-        this.blogs = blogsPromise.data;
-      });
-    } catch (err) {
-      runInAction(() => {
-        this.error = true;
-      });
-    } finally {
-      this.loading = false;
-    }
-  }
+    const blogs = yield blogsAPI.fetchBlogList();
+    this.blogs = blogs;
+    this.loading = false;
+  })
 
 
   @action removeBlog = (id: string): void => {
@@ -57,3 +48,5 @@ export class BlogListState {
         }))));
   }
 }
+
+export const blogListState = new BlogListState();
