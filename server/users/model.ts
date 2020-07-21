@@ -1,5 +1,4 @@
-import mongoose, { Schema } from "mongoose";
-import timestamps from "mongoose-timestamp";
+import { Schema, model } from "mongoose";
 
 
 const UserSchema = new Schema({
@@ -20,7 +19,5 @@ const UserSchema = new Schema({
   },
 });
 
-UserSchema.plugin(timestamps);
 
-
-module.exports = mongoose.model("User", UserSchema);
+export default model("User", UserSchema);

@@ -7,6 +7,7 @@ export interface IBlog {
   content: string;
   image: string;
   author: IUser;
-  comments: IBlogComment[];
-  rating: number
+  comments: Array<IBlogComment>;
+  rating: number;
+  tags: Array<string>;
 }

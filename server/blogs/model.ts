@@ -1,10 +1,9 @@
-import mongoose, { Schema } from "mongoose";
-import timestamps from "mongoose-timestamp";
+import { Schema, model } from "mongoose";
 
 import { blogTags } from "./tags";
 
 
-const BlogSchema = new Schema({
+const BlogSchema: Schema = new Schema({
   title: {
     type: String,
     trim: true,
@@ -38,7 +37,5 @@ const BlogSchema = new Schema({
   }],
 });
 
-BlogSchema.plugin(timestamps);
 
-
-module.exports = mongoose.model("Blog", BlogSchema);
+export default model("Blog", BlogSchema);

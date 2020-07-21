@@ -1,18 +1,18 @@
 /* eslint-disable no-console */
 
-import express from "express";
-import bodyParser from "body-parser";
-import cors from "cors";
-import path from "path";
-import mongoose from "mongoose";
-import config from "config";
+import * as express from "express";
+import * as bodyParser from "body-parser";
+import * as cors from "cors";
+import * as path from "path";
+import * as mongoose from "mongoose";
+import * as config from "config";
 
-import blogs from "./blogs/controller";
+import { blogsRouter } from "./blogs/controller";
 
 
-const app = express();
-const port = config.get("api.port") || 80;
-const host = config.get("api.host") || "localhost";
+const app: express.Application = express();
+const port: number = config.get("api.port") || 8080;
+const host: string = config.get("api.host") || "localhost";
 
 
 app.use(cors());
@@ -41,11 +41,11 @@ mongoose.connect(config.get("db.connectionString"), config.get("db.options")).th
   (err) => console.log(`[API] Error occured while connection to ${config.get("db.databaseName")} db: `, err),
 );
 mongoose.set("useCreateIndex", true);
-mongoose.set("debug", (coll, method) => {
+mongoose.set("debug", (coll: string, method: string) => {
   console.log(`[Mongoose] Path: /${coll}, method: ${method}`);
 });
 
-app.use("/api/", blogs);
+app.use("/api/blogs", blogsRouter);
 
 app.listen(port, host, (err) => {
   if (err) {

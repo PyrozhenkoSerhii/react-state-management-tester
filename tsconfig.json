@@ -9,10 +9,10 @@
     "sourceMap": true,
     "target": "es5",
     "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true
   },
   "include": [
     "src/**/*.ts",
-    "src/**/*.tsx"
+    "src/**/*.tsx",
+    "server/**/*.ts",
   ]
 }
