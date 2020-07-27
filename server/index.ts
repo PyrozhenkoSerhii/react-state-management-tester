@@ -7,7 +7,9 @@ import * as path from "path";
 import * as mongoose from "mongoose";
 import * as config from "config";
 
+
 import { blogsRouter } from "./blogs/controller";
+import { errorHandler } from "./middleware/errorHandler";
 
 
 const app: express.Application = express();
@@ -46,6 +48,8 @@ mongoose.set("debug", (coll: string, method: string) => {
 });
 
 app.use("/api/blogs", blogsRouter);
+
+app.use(errorHandler);
 
 app.listen(port, host, (err) => {
   if (err) {

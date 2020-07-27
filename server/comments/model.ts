@@ -1,5 +1,16 @@
-import { Schema, model } from "mongoose";
+import {
+  Schema, model, Document, Types,
+} from "mongoose";
+import { IUser } from "../users/model";
 
+export interface IComment {
+  content: string;
+  author: Types.ObjectId | IUser;
+  comments: Array<IComment|string>;
+  rating: number;
+}
+
+export type TComment = IComment & Document;
 
 const CommentSchema = new Schema({
   content: {
@@ -12,7 +23,7 @@ const CommentSchema = new Schema({
     ref: "User",
     required: [true, "Comment's author is required"],
   },
-  comment: [{
+  comments: [{
     type: Schema.Types.ObjectId,
     ref: "Comment",
   }],
@@ -20,7 +31,10 @@ const CommentSchema = new Schema({
     type: Number,
     default: 0,
   },
+}, {
+  versionKey: false,
+  timestamps: true,
 });
 
 
-export default model("Commment", CommentSchema);
+export const CommentModel = model<TComment>("Commment", CommentSchema);

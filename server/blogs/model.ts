@@ -1,7 +1,22 @@
-import { Schema, model } from "mongoose";
+import {
+  Schema, model, Document, Types,
+} from "mongoose";
 
 import { blogTags } from "./tags";
+import { TUser } from "../users/model";
+import { TComment } from "../comments/model";
 
+export interface IBlog {
+  title: string;
+  content: string;
+  image: string;
+  author: TUser | Types.ObjectId;
+  rating: number;
+  tags: Array<string>;
+  comments: Array<TComment | Types.ObjectId>;
+}
+
+export type TBlog = IBlog & Document;
 
 const BlogSchema: Schema = new Schema({
   title: {
@@ -31,11 +46,11 @@ const BlogSchema: Schema = new Schema({
     type: String,
     enum: blogTags,
   }],
-  comment: [{
+  comments: [{
     type: Schema.Types.ObjectId,
     ref: "Comment",
   }],
 });
 
 
-export default model("Blog", BlogSchema);
+export const BlogModel = model<TBlog>("Blog", BlogSchema);

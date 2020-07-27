@@ -1,5 +1,13 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, Document } from "mongoose";
 
+
+export interface IUser {
+  username: string;
+  email: string;
+  image: string;
+}
+
+export type TUser = IUser & Document
 
 const UserSchema = new Schema({
   username: {
@@ -17,7 +25,10 @@ const UserSchema = new Schema({
     trim: true,
     required: [true, "User's profile image is required"],
   },
+}, {
+  versionKey: false,
+  timestamps: true,
 });
 
 
-export default model("User", UserSchema);
+export const UserModel = model<TUser>("User", UserSchema);

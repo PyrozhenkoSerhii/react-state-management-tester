@@ -12,7 +12,8 @@
     "client-dev-context-v1": "webpack-dev-server --config webpack.config.dev.js --env.type=context --env.version=v1",
     "server-dev": "nodemon -r dotenv/config ./server/index.ts",
     "server-build": "tsc --project ./server/",
-    "lint-client": "eslint src"
+    "lint-client": "eslint src",
+    "db-populate": "npx ts-node -r dotenv/config ./server/utils/populate.ts"
   },
   "keywords": [],
   "author": "Serhii Pyrozhenko",
@@ -53,6 +54,7 @@
     "webpack-merge": "^4.2.2"
   },
   "dependencies": {
+    "@types/lodash": "^4.14.158",
     "antd": "^4.4.2",
     "axios": "^0.19.2",
     "better-npm-run": "^0.1.1",
