@@ -9,6 +9,8 @@ module.exports = {
     databaseName: process.env.DB_NAME,
     options: {
       useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useCreateIndex: true,
     },
     maxDumpSize: 100000000,
   },

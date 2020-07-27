@@ -4,13 +4,11 @@ import * as express from "express";
 import * as bodyParser from "body-parser";
 import * as cors from "cors";
 import * as path from "path";
-import * as mongoose from "mongoose";
 import * as config from "config";
-
+import "./utils/database";
 
 import { blogsRouter } from "./blogs/controller";
 import { errorHandler } from "./middleware/errorHandler";
-
 
 const app: express.Application = express();
 const port: number = config.get("api.port") || 8080;
@@ -38,18 +36,9 @@ app.get("/context/v1", (req, res) => {
   res.sendFile(path.join(__dirname, "../dist/public/context/v1", "index.html"));
 });
 
-mongoose.connect(config.get("db.connectionString"), config.get("db.options")).then(
-  () => console.log(`[API] Connection to ${config.get("db.databaseName")} db was established `),
-  (err) => console.log(`[API] Error occured while connection to ${config.get("db.databaseName")} db: `, err),
-);
-mongoose.set("useCreateIndex", true);
-mongoose.set("debug", (coll: string, method: string) => {
-  console.log(`[Mongoose] Path: /${coll}, method: ${method}`);
-});
-
 app.use("/api/blogs", blogsRouter);
-
 app.use(errorHandler);
+
 
 app.listen(port, host, (err) => {
   if (err) {

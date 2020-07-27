@@ -37,4 +37,4 @@ const CommentSchema = new Schema({
 });
 
 
-export const CommentModel = model<TComment>("Commment", CommentSchema);
+export const CommentModel = model<TComment>("Comment", CommentSchema);

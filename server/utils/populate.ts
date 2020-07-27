@@ -1,7 +1,5 @@
-/* eslint-disable no-console */
-import * as config from "config";
-import * as mongoose from "mongoose";
-
+import "./database";
+import { connection, STATES } from "mongoose";
 import { random } from "lodash";
 
 import { BlogModel, IBlog } from "../blogs/model";
@@ -12,18 +10,11 @@ import { mockBlogs } from "./mocks/blogs";
 import { mockUsers } from "./mocks/users";
 import { mockComments } from "./mocks/comment";
 
-
-mongoose.connect(config.get("db.connectionString"), config.get("db.options")).then(
-  () => console.log(`[API] Connection to ${config.get("db.databaseName")} db was established `),
-  (err) => console.log(`[API] Error occured while connection to ${config.get("db.databaseName")} db: `, err),
-);
-mongoose.set("useCreateIndex", true);
-mongoose.set("debug", (coll: string, method: string) => {
-  console.log(`[Mongoose] Path: /${coll}, method: ${method}`);
-});
-
-
 const populate = async () => {
+  if (connection.readyState !== STATES.connected && connection.readyState !== STATES.connecting) {
+    return;
+  }
+
   await UserModel.deleteMany({});
 
   const users = await UserModel.insertMany(mockUsers);
