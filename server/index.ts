@@ -1,12 +1,11 @@
-/* eslint-disable no-console */
-
 import * as express from "express";
 import * as bodyParser from "body-parser";
 import * as cors from "cors";
 import * as path from "path";
 import * as config from "config";
-import "./utils/database";
 
+import "./utils/database";
+import { logger } from "./utils/logger";
 import { blogsRouter } from "./blogs/controller";
 import { errorHandler } from "./middleware/errorHandler";
 
@@ -42,8 +41,8 @@ app.use(errorHandler);
 
 app.listen(port, host, (err) => {
   if (err) {
-    console.log("Error while launching the server");
+    logger.info("[API] Error while launching the server");
   } else {
-    console.log(`Server is running on port ${port}`);
+    logger.info(`[API] Server is running on port ${port}`);
   }
 });
