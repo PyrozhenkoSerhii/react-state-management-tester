@@ -7,7 +7,7 @@ const defaultError = "Unknown error on the server";
 export const blogsAPI = {
   fetchBlogList: async (): Promise<IAxiosResponse<Array<IBlog>>> => {
     try {
-      const response = await instance.get<Array<IBlog>>("/blogs/list");
+      const response = await instance.get<Array<IBlog>>("/blogs");
       return {
         data: response.data,
         error: null,

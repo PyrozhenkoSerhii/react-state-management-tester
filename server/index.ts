@@ -28,7 +28,7 @@ const swaggerOptions: swaggerJsDoc.Options = {
     }],
     host: `${host}:${port}`,
   },
-  apis: ["**/*.ts"],
+  apis: ["server/users/**/*.ts", "server/blogs/**/*.ts"],
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
@@ -59,10 +59,6 @@ app.get("/context/v1", (req, res) => {
 
 app.use("/api", blogsRouter);
 
-app.use((req, res, next) => {
-  const error = new Error("Not found");
-  next(error);
-});
 app.use(errorHandler);
 
 app.listen(port, host, (err) => {
