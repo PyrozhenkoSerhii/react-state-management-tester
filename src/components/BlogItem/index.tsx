@@ -12,7 +12,7 @@ type TProps = {
 export const BlogItem = ({ blog }: TProps): JSX.Element => (
   <Card
     hoverable
-    style={{ width: "90%" }}
+    style={{ width: "33%" }}
     cover={<img alt="blog" src={blog.image} />}
   >
     <Meta title={blog.title} description={blog.content} />

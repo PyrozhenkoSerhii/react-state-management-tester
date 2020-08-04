@@ -39,7 +39,10 @@ const populate = async () => {
     ...blog,
     author: usersId[random(0, usersId.length - 1)],
     comments: commentsIds[random(0, commentsIds.length - 1)],
+    wordsCount: blog.content.match(/[\w\d’'-]+/gi).length,
   }));
+
+  process.exit();
 };
 
 

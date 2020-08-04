@@ -5,6 +5,7 @@ export interface IBlog {
   id: string;
   title: string;
   content: string;
+  wordsCount: number;
   image: string;
   author: IUser;
   comments: Array<IBlogComment>;

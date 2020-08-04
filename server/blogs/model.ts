@@ -9,6 +9,7 @@ import { TComment } from "../comments/model";
 export interface IBlog {
   title: string;
   content: string;
+  wordsCount: number;
   image: string;
   author: TUser | Types.ObjectId;
   rating: number;
@@ -28,6 +29,10 @@ const BlogSchema: Schema = new Schema({
     type: String,
     trim: true,
     required: [true, "Blog's content is required"],
+  },
+  wordsCount: {
+    type: Number,
+    required: [true, "Blog's words count is required"],
   },
   image: {
     type: String,

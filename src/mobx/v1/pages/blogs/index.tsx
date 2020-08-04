@@ -5,6 +5,10 @@ import { Spin, Alert } from "antd";
 import { blogListState } from "../../store/list";
 import { BlogItem } from "../../../../components/BlogItem/index";
 
+import {
+  BlogListBodyWrapper, BlogListContent, BlogListHeaderWrapper, BlogListSidebar, BlogListWrapper,
+} from "./styled";
+
 const { useContext, useEffect } = React;
 
 export const BlogListPage = observer(() => {
@@ -23,10 +27,16 @@ export const BlogListPage = observer(() => {
   }
 
   return (
-    <div>
-      {store.blogs && store.blogs.map((blog) => (
-        <BlogItem blog={blog} />
-      ))}
-    </div>
+    <BlogListWrapper>
+      <BlogListHeaderWrapper />
+      <BlogListBodyWrapper>
+        <BlogListSidebar />
+        <BlogListContent>
+          {store.defaultBlogs && store.defaultBlogs.map((blog) => (
+            <BlogItem blog={blog} />
+          ))}
+        </BlogListContent>
+      </BlogListBodyWrapper>
+    </BlogListWrapper>
   );
 });

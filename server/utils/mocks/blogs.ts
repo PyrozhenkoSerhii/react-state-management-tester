@@ -1,6 +1,6 @@
 import { IBlog } from "../../blogs/model";
 
-type TMockBlog = Omit<IBlog, "author"|"comments">;
+type TMockBlog = Omit<IBlog, "author"|"comments"|"wordsCount">;
 
 export const mockBlogs: Array<TMockBlog> = [
   {
