@@ -3,7 +3,8 @@ import { observer } from "mobx-react";
 import { Spin, Alert } from "antd";
 
 import { blogListState } from "../../store/list";
-import { BlogItem } from "../../../../components/BlogItem/index";
+import { BlogItem } from "../../../../components/BlogItem";
+import { Filters } from "../../../../components/Filters";
 
 import {
   BlogListBodyWrapper, BlogListContent, BlogListHeaderWrapper, BlogListSidebar, BlogListWrapper,
@@ -26,16 +27,22 @@ export const BlogListPage = observer(() => {
     );
   }
 
+  console.log(store.filters);
+
   return (
     <BlogListWrapper>
       <BlogListHeaderWrapper />
       <BlogListBodyWrapper>
-        <BlogListSidebar />
         <BlogListContent>
-          {store.defaultBlogs && store.defaultBlogs.map((blog) => (
-            <BlogItem blog={blog} />
+          {store.blogs && store.blogs.map((blog) => (
+            <BlogItem key={blog.id} blog={blog} />
           ))}
         </BlogListContent>
+        <BlogListSidebar>
+          {store.filters && (
+            <Filters filters={store.filters} onChange={store.updateFilters} />
+          )}
+        </BlogListSidebar>
       </BlogListBodyWrapper>
     </BlogListWrapper>
   );

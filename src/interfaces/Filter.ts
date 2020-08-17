@@ -26,3 +26,15 @@ export interface IRangeFilter extends IFilter {
   minDefault: number;
   maxDefault: number;
 }
+
+export function isBooleanFilter(filter: IFilter): filter is IBooleanFilter {
+  return filter.type === FilterTypeEnum.Boolean;
+}
+
+export function isValueFilter(filter: IFilter): filter is IValueFilter {
+  return filter.type === FilterTypeEnum.Value;
+}
+
+export function isRangeFilter(filter: IFilter): filter is IRangeFilter {
+  return filter.type === FilterTypeEnum.Range;
+}

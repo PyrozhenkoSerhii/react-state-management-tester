@@ -18,7 +18,7 @@ export const BlogListHeaderWrapper = styled.div`
 
 export const BlogListBodyWrapper = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   width: 100%;
   height: calc(100% - 100px);
 `;

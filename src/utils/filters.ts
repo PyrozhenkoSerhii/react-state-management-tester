@@ -26,11 +26,11 @@ export const generateFilters = (
     type: FilterTypeEnum.Value,
   }];
 
-
+  const maxWords = blogs.reduce((acc, { wordsCount }) => (acc > wordsCount ? acc : wordsCount), 0);
   const rangeFilters: Array<IRangeFilter> = [{
     title: "length",
-    maxDefault: blogs.reduce((acc, { wordsCount }) => (acc > wordsCount ? acc : wordsCount), 0),
-    max: 1000,
+    maxDefault: maxWords,
+    max: maxWords,
     minDefault: 0,
     min: 0,
     type: FilterTypeEnum.Range,

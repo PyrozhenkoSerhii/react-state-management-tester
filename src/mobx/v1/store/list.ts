@@ -1,5 +1,5 @@
 import { createContext } from "react";
-
+import { find } from "lodash";
 import { observable, action, flow } from "mobx";
 
 import { blogsAPI } from "../../../axios/blogs";
@@ -8,13 +8,19 @@ import { generateFilters } from "../../../utils/filters";
 import { IBlog } from "../../../interfaces/Blog";
 import { IBlogComment } from "../../../interfaces/Comment";
 import { IAxiosResponse } from "../../../interfaces/AxiosResponse";
-import { IBooleanFilter, IValueFilter, IRangeFilter } from "../../../interfaces/Filter";
+import {
+  IBooleanFilter, IValueFilter, IRangeFilter, isBooleanFilter, isValueFilter, isRangeFilter,
+} from "../../../interfaces/Filter";
 
 
 class BlogListState {
   @observable defaultBlogs: Array<IBlog>;
 
+  @observable blogs: Array<IBlog>;
+
   @observable defaultFilters: Array<IBooleanFilter|IValueFilter|IRangeFilter>;
+
+  @observable filters: Array<IBooleanFilter|IValueFilter|IRangeFilter>;
 
   @observable loading = false;
 
@@ -27,12 +33,28 @@ class BlogListState {
     const { data, error }: IAxiosResponse<Array<IBlog>> = yield blogsAPI.fetchBlogList();
 
     this.defaultBlogs = data;
+    this.blogs = data;
     this.error = error;
     this.loading = false;
 
-    this.defaultFilters = generateFilters(data);
+    const filters = generateFilters(data);
+    this.defaultFilters = filters;
+    this.filters = filters;
   })
 
+
+  @action updateFilters = (title: string, value: boolean | number, secondValue: number) => {
+    const filter = find(this.filters, { title });
+
+    if (isBooleanFilter(filter)) {
+      filter.value = !!value;
+    } else if (isValueFilter(filter)) {
+      filter.value = Number(value);
+    } else if (isRangeFilter(filter)) {
+      filter.min = Number(value);
+      filter.max = Number(secondValue);
+    }
+  }
 
   @action removeBlog = (id: string): void => {
     this.defaultBlogs = this.defaultBlogs.filter((blog) => blog.id !== id);

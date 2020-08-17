@@ -13,6 +13,7 @@ module.exports = (env) => merge(baseConfig, {
     host: "localhost",
     port: 80,
   },
+  devtool: 'source-map',
   plugins: [
     new HtmlWebpackPlugin({
       template: "./src/index.html",
