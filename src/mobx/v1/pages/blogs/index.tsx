@@ -27,7 +27,6 @@ export const BlogListPage = observer(() => {
     );
   }
 
-  console.log(store.filters);
 
   return (
     <BlogListWrapper>
