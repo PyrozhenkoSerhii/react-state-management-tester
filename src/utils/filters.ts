@@ -12,7 +12,7 @@ export const generateFilters = (
 ): Array<IBooleanFilter|IValueFilter|IRangeFilter> => {
   const booleanFilters = blogTags.map((tag) => <IBooleanFilter>{
     title: tag,
-    // available: sumBy(blogs, ({ tags }) => +tags.includes(tag)),
+    available: sumBy(blogs, ({ tags }) => +tags.includes(tag)),
     value: false,
     type: FilterTypeEnum.Boolean,
   });

@@ -1,6 +1,5 @@
 import * as React from "react";
 import { Checkbox, Input, Slider } from "antd";
-import { observer } from "mobx-react";
 import {
   IBooleanFilter, IValueFilter, IRangeFilter, isBooleanFilter, isRangeFilter, isValueFilter,
 } from "../../interfaces/Filter";
@@ -14,7 +13,7 @@ type TProps = {
   onChange: (title: string, value: boolean | number, secondValue?: number) => void;
 }
 
-export const Filters = observer(({ filters, onChange }: TProps): JSX.Element => (
+export const Filters = ({ filters, onChange }: TProps): JSX.Element => (
   <FiltersWrapper>
     {filters.map((filter) => {
       if (isBooleanFilter(filter)) {
@@ -27,6 +26,7 @@ export const Filters = observer(({ filters, onChange }: TProps): JSX.Element => 
             >
               {filter.title}
             </Checkbox>
+            {`(${filter.available})`}
           </BooleanFilterItem>
         );
       } if (isValueFilter(filter)) {
@@ -60,4 +60,4 @@ export const Filters = observer(({ filters, onChange }: TProps): JSX.Element => 
       );
     })}
   </FiltersWrapper>
-));
+);

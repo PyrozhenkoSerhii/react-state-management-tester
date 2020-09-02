@@ -1,59 +1,67 @@
 import { createContext } from "react";
 import { find } from "lodash";
-import { observable, action, flow } from "mobx";
+import { observable, action, runInAction } from "mobx";
 
-import { blogsAPI } from "../../../axios/blogs";
+import { fetchBlogList } from "../../../axios/blogs";
 import { generateFilters } from "../../../utils/filters";
 
 import { IBlog } from "../../../interfaces/Blog";
 import { IBlogComment } from "../../../interfaces/Comment";
-import { IAxiosResponse } from "../../../interfaces/AxiosResponse";
 import {
   IBooleanFilter, IValueFilter, IRangeFilter, isBooleanFilter, isValueFilter, isRangeFilter,
 } from "../../../interfaces/Filter";
 
 
 class BlogListState {
-  @observable defaultBlogs: Array<IBlog>;
+  @observable defaultBlogs: Array<IBlog> = [];
 
-  @observable blogs: Array<IBlog>;
+  @observable blogs: Array<IBlog> = [];
 
-  @observable defaultFilters: Array<IBooleanFilter|IValueFilter|IRangeFilter>;
+  @observable defaultFilters: Array<IBooleanFilter|IValueFilter|IRangeFilter> = [];
 
-  @observable filters: Array<IBooleanFilter|IValueFilter|IRangeFilter>;
+  @observable filters: Array<IBooleanFilter|IValueFilter|IRangeFilter> = [];
 
   @observable loading = false;
 
   @observable error: string | null = null;
 
-  fetchBlogList = flow(function* fetch() {
+  @action fetchBlogList = async () => {
     this.loading = true;
-    this.error = false;
+    try {
+      const blogs = await fetchBlogList();
+      const filters = generateFilters(blogs);
 
-    const { data, error }: IAxiosResponse<Array<IBlog>> = yield blogsAPI.fetchBlogList();
-
-    this.defaultBlogs = data;
-    this.blogs = data;
-    this.error = error;
-    this.loading = false;
-
-    const filters = generateFilters(data);
-    this.defaultFilters = filters;
-    this.filters = filters;
-  })
+      runInAction(() => {
+        this.defaultFilters = filters;
+        this.filters = filters;
+        this.defaultBlogs = blogs;
+        this.blogs = blogs;
+        this.loading = false;
+        this.error = null;
+      });
+    } catch (err) {
+      this.loading = false;
+      this.error = err;
+    }
+  }
 
 
   @action updateFilters = (title: string, value: boolean | number, secondValue: number) => {
-    const filter = find(this.filters, { title });
+    this.filters = this.filters.map((filter) => {
+      if (filter.title !== title) return filter;
+      const updated = filter;
 
-    if (isBooleanFilter(filter)) {
-      filter.value = !!value;
-    } else if (isValueFilter(filter)) {
-      filter.value = Number(value);
-    } else if (isRangeFilter(filter)) {
-      filter.min = Number(value);
-      filter.max = Number(secondValue);
-    }
+      if (isBooleanFilter(updated)) {
+        updated.value = !updated.value;
+      } else if (isValueFilter(updated)) {
+        updated.value = Number(value);
+      } else if (isRangeFilter(updated)) {
+        updated.min = Number(value);
+        updated.max = Number(secondValue);
+      }
+
+      return updated;
+    });
   }
 
   @action removeBlog = (id: string): void => {

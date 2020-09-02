@@ -12,34 +12,35 @@ import {
 
 const { useContext, useEffect } = React;
 
-export const BlogListPage = observer(() => {
-  const store = useContext(blogListState);
+export const BlogListPage = observer((): JSX.Element => {
+  const {
+    fetchBlogList, loading, error, filters, blogs, updateFilters,
+  } = useContext(blogListState);
 
   useEffect(() => {
-    store.fetchBlogList();
+    fetchBlogList();
   }, []);
 
-  if (store.loading) return <Spin />;
+  if (loading) return <Spin />;
 
-  if (store.error) {
+  if (error) {
     return (
-      <Alert message={store.error} type="error" closable />
+      <Alert message={error} type="error" closable />
     );
   }
-
 
   return (
     <BlogListWrapper>
       <BlogListHeaderWrapper />
       <BlogListBodyWrapper>
         <BlogListContent>
-          {store.blogs && store.blogs.map((blog) => (
+          {blogs && blogs.map((blog) => (
             <BlogItem key={blog._id} blog={blog} />
           ))}
         </BlogListContent>
         <BlogListSidebar>
-          {store.filters && (
-            <Filters filters={store.filters} onChange={store.updateFilters} />
+          {filters && (
+            <Filters filters={filters} onChange={updateFilters} />
           )}
         </BlogListSidebar>
       </BlogListBodyWrapper>

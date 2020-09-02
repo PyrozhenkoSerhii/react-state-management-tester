@@ -1,5 +1,6 @@
 import * as React from "react";
-import { Card, Badge } from "antd";
+import { Card, Statistic } from "antd";
+import { LikeFilled, DislikeFilled } from "@ant-design/icons";
 
 import { IBlog } from "../../interfaces/Blog";
 import { TagComponent } from "./Tag";
@@ -25,7 +26,13 @@ export const BlogItem = ({ blog }: TProps): JSX.Element => (
           <TagComponent tag={tag} key={tag} />
         ))}
       </TagsWrapper>
-      <Badge count={blog.rating} style={{ backgroundColor: blog.rating > 0 ? "#6ecc4e" : "52c41a" }} />
+      <Statistic
+        title="Rating"
+        value={blog.rating}
+        prefix={blog.rating > 0
+          ? <LikeFilled style={{ color: "rgb(122, 216, 91)" }} />
+          : <DislikeFilled style={{ color: "rgb(249, 147, 169)" }} />}
+      />
     </HeaderWrapper>
 
     <Meta title={blog.title} description={shortenText(blog.content)} />

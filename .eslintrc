@@ -43,6 +43,7 @@
     "react/jsx-props-no-spreading": "off",
     "no-underscore-dangle": "off",
     "no-param-reassign": "off",
-    "explicit-module-boundary-types": "off"
+    "explicit-module-boundary-types": "off",
+    "no-restricted-syntax": "off"
   }
 }
