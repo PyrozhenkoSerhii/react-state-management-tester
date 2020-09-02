@@ -4,3 +4,10 @@ export const blogTags = [
   "tech",
   "health",
 ];
+
+export enum BlogTagsEnum {
+  "nature" = "nature",
+  "politics" = "politics",
+  "tech" = "tech",
+  "health" = "health",
+}

@@ -6,14 +6,16 @@ import { BlogModel, IBlog } from "../blogs/model";
 import { UserModel } from "../users/model";
 import { CommentModel, IComment } from "../comments/model";
 
-import { mockBlogs } from "./mocks/blogs";
-import { mockUsers } from "./mocks/users";
-import { mockComments } from "./mocks/comment";
+import { generateBlog, generateComments, generateUsers } from "./generator";
 
 const populate = async () => {
   if (connection.readyState !== STATES.connected && connection.readyState !== STATES.connecting) {
     return;
   }
+
+  const mockBlogs = generateBlog(30);
+  const mockComments = generateComments(50);
+  const mockUsers = generateUsers(10);
 
   await UserModel.deleteMany({});
 

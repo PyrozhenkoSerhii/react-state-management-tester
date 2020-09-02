@@ -34,7 +34,7 @@ export const BlogListPage = observer(() => {
       <BlogListBodyWrapper>
         <BlogListContent>
           {store.blogs && store.blogs.map((blog) => (
-            <BlogItem key={blog.id} blog={blog} />
+            <BlogItem key={blog._id} blog={blog} />
           ))}
         </BlogListContent>
         <BlogListSidebar>

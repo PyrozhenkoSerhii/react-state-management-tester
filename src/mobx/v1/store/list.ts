@@ -57,11 +57,11 @@ class BlogListState {
   }
 
   @action removeBlog = (id: string): void => {
-    this.defaultBlogs = this.defaultBlogs.filter((blog) => blog.id !== id);
+    this.defaultBlogs = this.defaultBlogs.filter((blog) => blog._id !== id);
   }
 
   @action commentBlog = (id: string, comment: IBlogComment): void => {
-    this.defaultBlogs = this.defaultBlogs.map((blog: IBlog) => (blog.id !== id ? blog
+    this.defaultBlogs = this.defaultBlogs.map((blog: IBlog) => (blog._id !== id ? blog
       : {
         ...blog,
         comments: [
@@ -72,7 +72,7 @@ class BlogListState {
   }
 
   @action commentBlogComment = (blogId: string, commentId: string, comment: IBlogComment): void => {
-    this.defaultBlogs = this.defaultBlogs.map((blog: IBlog) => (blog.id !== blogId ? blog
+    this.defaultBlogs = this.defaultBlogs.map((blog: IBlog) => (blog._id !== blogId ? blog
       : {
         ...blog,
         comments: blog.comments.map(
