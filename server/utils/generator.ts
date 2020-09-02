@@ -49,7 +49,7 @@ export const generateBlog = (amount: number): Array<TMockBlog> => {
       rating: random(-100, 100),
       tags: generateTags(),
       content: lorem.generateParagraphs(random(1, 3)),
-      image: "https://picsum.photos/200/300",
+      image: "https://picsum.photos/400/200",
     });
   }
 
@@ -78,7 +78,7 @@ export const generateUsers = (amount: number): Array<IUser> => {
     result.push({
       email: `${lorem.generateWords(1)}@gmail.com`,
       username: lorem.generateWords(2),
-      image: "https://picsum.photos/200/300",
+      image: "https://picsum.photos/400",
     });
   }
 

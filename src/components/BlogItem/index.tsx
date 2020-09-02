@@ -1,8 +1,11 @@
 import * as React from "react";
-import { Card } from "antd";
+import { Card, Badge } from "antd";
 
 import { IBlog } from "../../interfaces/Blog";
 import { TagComponent } from "./Tag";
+import { shortenText } from "./utils";
+import { TagsWrapper, HeaderWrapper } from "./styled";
+
 
 const { Meta } = Card;
 
@@ -16,9 +19,15 @@ export const BlogItem = ({ blog }: TProps): JSX.Element => (
     style={{ width: "33%" }}
     cover={<img alt="blog" src={`${blog.image}?random=${blog._id}`} />}
   >
-    {blog.tags.map((tag) => (
-      <TagComponent tag={tag} key={tag} />
-    ))}
-    <Meta title={blog.title} description={blog.content} />
+    <HeaderWrapper>
+      <TagsWrapper>
+        {blog.tags.map((tag) => (
+          <TagComponent tag={tag} key={tag} />
+        ))}
+      </TagsWrapper>
+      <Badge count={blog.rating} style={{ backgroundColor: blog.rating > 0 ? "#6ecc4e" : "52c41a" }} />
+    </HeaderWrapper>
+
+    <Meta title={blog.title} description={shortenText(blog.content)} />
   </Card>
 );
