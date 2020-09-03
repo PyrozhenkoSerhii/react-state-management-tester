@@ -13,7 +13,7 @@ const populate = async () => {
     return;
   }
 
-  const mockBlogs = generateBlog(30);
+  const mockBlogs = generateBlog(200);
   const mockComments = generateComments(50);
   const mockUsers = generateUsers(10);
 

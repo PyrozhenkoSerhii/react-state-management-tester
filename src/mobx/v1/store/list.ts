@@ -1,9 +1,8 @@
 import { createContext } from "react";
-import { find } from "lodash";
 import { observable, action, runInAction } from "mobx";
 
 import { fetchBlogList } from "../../../axios/blogs";
-import { generateFilters } from "../../../utils/filters";
+import { generateFilters, isBlogPasses } from "../../../utils/filters";
 
 import { IBlog } from "../../../interfaces/Blog";
 import { IBlogComment } from "../../../interfaces/Comment";
@@ -47,7 +46,7 @@ class BlogListState {
 
 
   @action updateFilters = (title: string, value: boolean | number, secondValue: number) => {
-    this.filters = this.filters.map((filter) => {
+    const filters = this.filters.map((filter) => {
       if (filter.title !== title) return filter;
       const updated = filter;
 
@@ -62,6 +61,11 @@ class BlogListState {
 
       return updated;
     });
+
+    this.blogs = this.defaultBlogs.map(
+      (blog) => (isBlogPasses(blog, filters) ? blog : null),
+    ).filter(Boolean);
+    this.filters = filters;
   }
 
   @action removeBlog = (id: string): void => {

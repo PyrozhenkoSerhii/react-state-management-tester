@@ -1,7 +1,8 @@
 import { sumBy } from "lodash";
 
 import {
-  IBooleanFilter, IRangeFilter, IValueFilter, FilterTypeEnum,
+  IBooleanFilter, IRangeFilter, IValueFilter,
+  FilterTypeEnum, isBooleanFilter, isRangeFilter,
 } from "../interfaces/Filter";
 import { blogTags } from "../../server/blogs/tags";
 import { IBlog } from "../interfaces/Blog";
@@ -10,20 +11,18 @@ import { IBlog } from "../interfaces/Blog";
 export const generateFilters = (
   blogs: Array<IBlog>,
 ): Array<IBooleanFilter|IValueFilter|IRangeFilter> => {
-  const booleanFilters = blogTags.map((tag) => <IBooleanFilter>{
+  let booleanFilters = blogTags.map((tag) => <IBooleanFilter>{
     title: tag,
     available: sumBy(blogs, ({ tags }) => +tags.includes(tag)),
     value: false,
     type: FilterTypeEnum.Boolean,
   });
 
-
-  const valueFilters: Array<IValueFilter> = [{
-    title: "count",
-    value: 10,
-    maxValue: blogs.length,
-    minValue: 6,
-    type: FilterTypeEnum.Value,
+  booleanFilters = [...booleanFilters, {
+    title: "positive-only",
+    available: sumBy(blogs, ({ rating }) => +(rating > 0)),
+    value: false,
+    type: FilterTypeEnum.Boolean,
   }];
 
   const maxWords = blogs.reduce((acc, { wordsCount }) => (acc > wordsCount ? acc : wordsCount), 0);
@@ -36,5 +35,39 @@ export const generateFilters = (
     type: FilterTypeEnum.Range,
   }];
 
-  return [...booleanFilters, ...valueFilters, ...rangeFilters];
+  return [...booleanFilters, ...rangeFilters];
+};
+
+export const isBlogPasses = (
+  blog: IBlog,
+  filters: Array<IBooleanFilter|IValueFilter|IRangeFilter>,
+): boolean => {
+  for (let i = 0; i < filters.length; i += 1) {
+    const filter = filters[i];
+    if (isBooleanFilter(filter)) {
+      // Tag filters
+      if (blogTags.includes(filter.title)) {
+        if (filter.value && !blog.tags.includes(filter.title)) {
+          return false;
+        }
+      }
+      // Positive only filter
+      if (filter.title === "positive-only") {
+        if (blog.rating <= 0) {
+          return false;
+        }
+      }
+    } else if (isRangeFilter(filter)) {
+      switch (filter.title) {
+        case "length":
+          if (blog.wordsCount > filter.max || blog.wordsCount < filter.min) {
+            return false;
+          }
+          break;
+        default:
+          break;
+      }
+    }
+  }
+  return true;
 };

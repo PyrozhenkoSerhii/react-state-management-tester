@@ -5,7 +5,9 @@ import { LikeFilled, DislikeFilled } from "@ant-design/icons";
 import { IBlog } from "../../interfaces/Blog";
 import { TagComponent } from "./Tag";
 import { shortenText } from "./utils";
-import { TagsWrapper, HeaderWrapper } from "./styled";
+import {
+  TagsWrapper, HeaderWrapper, MetaWrapper, FooterWrapper,
+} from "./styled";
 
 
 const { Meta } = Card;
@@ -26,6 +28,11 @@ export const BlogItem = ({ blog }: TProps): JSX.Element => (
           <TagComponent tag={tag} key={tag} />
         ))}
       </TagsWrapper>
+    </HeaderWrapper>
+    <MetaWrapper>
+      <Meta title={blog.title} description={shortenText(blog.content)} />
+    </MetaWrapper>
+    <FooterWrapper>
       <Statistic
         title="Rating"
         value={blog.rating}
@@ -33,8 +40,12 @@ export const BlogItem = ({ blog }: TProps): JSX.Element => (
           ? <LikeFilled style={{ color: "rgb(122, 216, 91)" }} />
           : <DislikeFilled style={{ color: "rgb(249, 147, 169)" }} />}
       />
-    </HeaderWrapper>
+      <Statistic
+        title="Words"
+        value={blog.wordsCount}
+      />
+    </FooterWrapper>
 
-    <Meta title={blog.title} description={shortenText(blog.content)} />
+
   </Card>
 );
