@@ -4,7 +4,7 @@ export const fetchBlogsAsync = (): IFetchBlogsAction => ({
   type: FETCH_BLOGS,
 });
 
-export const updateFilers = (
+export const updateFilters = (
   title: string,
   value: boolean | number,
   secondValue: number = null,

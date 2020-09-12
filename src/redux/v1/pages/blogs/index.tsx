@@ -1,19 +1,20 @@
 import * as React from "react";
-import { observer } from "mobx-react";
 import { Spin, Alert } from "antd";
 
 import { useSelector, useDispatch } from "react-redux";
-import { fetchBlogsAsync, updateFilers } from "../../store/blog/actions";
+import { fetchBlogsAsync, updateFilters } from "../../store/blog/actions";
 import { IApplicationState } from "../../store/types";
 
 import { BlogItem } from "../../../../components/BlogItem";
 import { Filters } from "../../../../components/Filters";
+import { TrackerService } from "../../../../services/tracker";
+import { TrackerActions, TrackerSources, TrackerPositions } from "../../../../../shared/interfaces";
 
 import { BlogListBodyWrapper, BlogListContent, BlogListHeaderWrapper, BlogListSidebar, BlogListWrapper } from "./styled";
 
-const { useEffect } = React;
+const { useEffect, useState } = React;
 
-export const BlogListPage = observer((): JSX.Element => {
+export const BlogListPage = (): JSX.Element => {
   const dispatch = useDispatch();
 
   const { blogs, error, loading, filters } = useSelector((state: IApplicationState) => state.blogs);
@@ -22,6 +23,33 @@ export const BlogListPage = observer((): JSX.Element => {
     dispatch(fetchBlogsAsync());
   }, []);
 
+
+  const [fromRedux, setFromRedux] = useState(false);
+  useEffect(() => {
+    if (fromRedux) {
+      TrackerService.setTimeStamps({
+        source: TrackerSources.ReduxV1,
+        position: TrackerPositions.ReduxCommit,
+        action: TrackerActions.FilterBlogList,
+        state: "finished",
+        timestamp: Date.now(),
+      });
+      setFromRedux(false);
+    }
+  }, [blogs]);
+
+  const onFilerChange = (title: string, value: boolean | number, secondValue: number): void => {
+    TrackerService.setTimeStamps({
+      source: TrackerSources.ReduxV1,
+      position: TrackerPositions.ReduxReduce,
+      action: TrackerActions.FilterBlogList,
+      state: "started",
+      timestamp: Date.now(),
+    });
+    dispatch(updateFilters(title, value, secondValue));
+    setFromRedux(true);
+  };
+
   if (loading) return <Spin />;
 
   if (error) {
@@ -29,10 +57,6 @@ export const BlogListPage = observer((): JSX.Element => {
       <Alert message={error} type="error" closable />
     );
   }
-
-  const onFilerChange = (title: string, value: boolean | number, secondValue: number): void => {
-    dispatch(updateFilers(title, value, secondValue));
-  };
 
   return (
     <BlogListWrapper>
@@ -51,4 +75,4 @@ export const BlogListPage = observer((): JSX.Element => {
       </BlogListBodyWrapper>
     </BlogListWrapper>
   );
-});
+};

@@ -8,8 +8,10 @@ import * as swaggerUi from "swagger-ui-express";
 
 import "./utils/database";
 import { logger } from "./utils/logger";
-import { blogsRouter } from "./blogs/controller";
 import { errorHandler } from "./middleware/errorHandler";
+
+import { blogsRouter } from "./blogs/controller";
+import { trackerRouter } from "./tracker/controller";
 
 const app: express.Application = express();
 const port: number = config.get("api.port") || 8080;
@@ -58,6 +60,7 @@ app.get("/context/v1", (req, res) => {
 });
 
 app.use("/api", blogsRouter);
+app.use("/api", trackerRouter);
 
 app.use(errorHandler);
 

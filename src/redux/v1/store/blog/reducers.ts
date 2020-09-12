@@ -9,6 +9,9 @@ import {
 import { isBooleanFilter, isRangeFilter, isValueFilter } from "../../../../interfaces/Filter";
 import { isBlogPasses } from "../../../../utils/filters";
 
+import { TrackerService } from "../../../../services/tracker";
+import { TrackerSources, TrackerActions, TrackerPositions } from "../../../../../shared/interfaces";
+
 const initialState: IBlogsState = {
   defaultBlogs: [],
   blogs: [],
@@ -49,6 +52,14 @@ export const blogsReducer = (
         error: action.payload.error,
       };
     case UPDATE_FILTERS: {
+      TrackerService.setTimeStamps({
+        source: TrackerSources.ReduxV1,
+        position: TrackerPositions.ReduxReduce,
+        action: TrackerActions.FilterBlogList,
+        state: "finished",
+        timestamp: Date.now(),
+      });
+
       const { title, value, secondValue } = action.payload;
 
       const filters = state.filters.map((filter) => {
@@ -70,6 +81,14 @@ export const blogsReducer = (
       const blogs = state.defaultBlogs.map(
         (blog) => (isBlogPasses(blog, filters) ? blog : null),
       ).filter(Boolean);
+
+      TrackerService.setTimeStamps({
+        source: TrackerSources.ReduxV1,
+        position: TrackerPositions.ReduxCommit,
+        action: TrackerActions.FilterBlogList,
+        state: "started",
+        timestamp: Date.now(),
+      });
 
       return {
         ...state,
