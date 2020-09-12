@@ -3,22 +3,20 @@ import { observer } from "mobx-react";
 import { Spin, Alert } from "antd";
 
 import { useSelector, useDispatch } from "react-redux";
-import { fetchBlogsAsync } from "../../store/blog/actions";
+import { fetchBlogsAsync, updateFilers } from "../../store/blog/actions";
 import { IApplicationState } from "../../store/types";
 
 import { BlogItem } from "../../../../components/BlogItem";
 import { Filters } from "../../../../components/Filters";
 
-import {
-  BlogListBodyWrapper, BlogListContent, BlogListHeaderWrapper, BlogListSidebar, BlogListWrapper,
-} from "./styled";
+import { BlogListBodyWrapper, BlogListContent, BlogListHeaderWrapper, BlogListSidebar, BlogListWrapper } from "./styled";
 
 const { useEffect } = React;
 
 export const BlogListPage = observer((): JSX.Element => {
   const dispatch = useDispatch();
 
-  const { blogs, error, loading } = useSelector((state: IApplicationState) => state.blogs);
+  const { blogs, error, loading, filters } = useSelector((state: IApplicationState) => state.blogs);
 
   useEffect(() => {
     dispatch(fetchBlogsAsync());
@@ -32,6 +30,10 @@ export const BlogListPage = observer((): JSX.Element => {
     );
   }
 
+  const onFilerChange = (title: string, value: boolean | number, secondValue: number): void => {
+    dispatch(updateFilers(title, value, secondValue));
+  };
+
   return (
     <BlogListWrapper>
       <BlogListHeaderWrapper />
@@ -42,9 +44,9 @@ export const BlogListPage = observer((): JSX.Element => {
           ))}
         </BlogListContent>
         <BlogListSidebar>
-          {/* {filters && (
-            <Filters filters={filters} onChange={updateFilters} />
-          )} */}
+          {filters && (
+            <Filters filters={filters} onChange={onFilerChange} />
+          )}
         </BlogListSidebar>
       </BlogListBodyWrapper>
     </BlogListWrapper>

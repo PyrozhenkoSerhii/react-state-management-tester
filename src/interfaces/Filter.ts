@@ -27,6 +27,8 @@ export interface IRangeFilter extends IFilter {
   maxDefault: number;
 }
 
+export type Filters = Array<IValueFilter | IBooleanFilter | IRangeFilter>;
+
 export function isBooleanFilter(filter: IFilter): filter is IBooleanFilter {
   return filter.type === FilterTypeEnum.Boolean;
 }
