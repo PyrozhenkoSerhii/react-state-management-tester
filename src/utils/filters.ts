@@ -53,7 +53,7 @@ export const isBlogPasses = (
       }
       // Positive only filter
       if (filter.title === "positive-only") {
-        if (blog.rating <= 0) {
+        if (filter.value && blog.rating <= 0) {
           return false;
         }
       }

@@ -5,11 +5,9 @@ import { SagaIterator } from "redux-saga";
 
 import * as BlogTypes from "./types";
 
-import { blogsAPI } from "../../../../axios/blogs";
+import { fetchBlogList } from "../../../../axios/blogs";
 import { IAxiosResponse } from "../../../../interfaces/AxiosResponse";
 import { IBlog } from "../../../../interfaces/Blog";
-
-const { fetchBlogList } = blogsAPI;
 
 function* fetchBlogsAsync(): SagaIterator {
   const { data, error }: IAxiosResponse<Array<IBlog>> = yield call(fetchBlogList);
