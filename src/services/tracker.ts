@@ -22,7 +22,6 @@ class TrackerServiceClass {
       return;
     }
 
-
     sendTrackerInfo({
       action: started.action,
       position: started.position,

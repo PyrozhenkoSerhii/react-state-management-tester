@@ -17,7 +17,6 @@ const app: express.Application = express();
 const port: number = config.get("api.port") || 8080;
 const host: string = config.get("api.host") || "localhost";
 
-
 const swaggerOptions: swaggerJsDoc.Options = {
   swaggerDefinition: {
     info: {
@@ -34,7 +33,6 @@ const swaggerOptions: swaggerJsDoc.Options = {
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
-
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));

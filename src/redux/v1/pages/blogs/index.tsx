@@ -23,7 +23,6 @@ export const BlogListPage = (): JSX.Element => {
     dispatch(fetchBlogsAsync());
   }, []);
 
-
   const [fromRedux, setFromRedux] = useState(false);
   useEffect(() => {
     if (fromRedux) {
