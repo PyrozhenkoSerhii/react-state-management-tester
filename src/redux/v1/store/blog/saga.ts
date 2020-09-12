@@ -6,22 +6,20 @@ import { SagaIterator } from "redux-saga";
 import * as BlogTypes from "./types";
 
 import { fetchBlogList } from "../../../../axios/blogs";
-import { IAxiosResponse } from "../../../../interfaces/AxiosResponse";
 import { IBlog } from "../../../../interfaces/Blog";
 
 function* fetchBlogsAsync(): SagaIterator {
-  const { data, error }: IAxiosResponse<Array<IBlog>> = yield call(fetchBlogList);
+  try {
+    const blogs: Array<IBlog> = yield call(fetchBlogList);
 
-
-  if (error) {
-    yield put<BlogTypes.IFetchBlogsActionError>({
-      type: BlogTypes.FETCH_BLOGS_ERROR,
-      payload: { error },
-    });
-  } else {
     yield put<BlogTypes.IFetchBlogsActionSuccess>({
       type: BlogTypes.FETCH_BLOGS_SUCCESS,
-      payload: { blogs: data },
+      payload: { blogs },
+    });
+  } catch (err) {
+    yield put<BlogTypes.IFetchBlogsActionError>({
+      type: BlogTypes.FETCH_BLOGS_ERROR,
+      payload: { error: err },
     });
   }
 }
