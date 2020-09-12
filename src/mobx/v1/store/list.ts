@@ -9,7 +9,8 @@ import { IBlogComment } from "../../../interfaces/Comment";
 import {
   IBooleanFilter, IValueFilter, IRangeFilter, isBooleanFilter, isValueFilter, isRangeFilter,
 } from "../../../interfaces/Filter";
-
+import { TimeTrackingActions, TimeTrackingSources } from "../../../../shared/interfaces";
+import { createTimeStamp } from "../../../axios/time";
 
 class BlogListState {
   @observable defaultBlogs: Array<IBlog> = [];
@@ -46,6 +47,10 @@ class BlogListState {
 
 
   @action updateFilters = (title: string, value: boolean | number, secondValue: number) => {
+    createTimeStamp({
+      action: TimeTrackingActions.INIT, source: TimeTrackingSources.MobxV1, title: "filter update", time: Date.now(),
+    });
+
     const filters = this.filters.map((filter) => {
       if (filter.title !== title) return filter;
       const updated = filter;
@@ -66,6 +71,10 @@ class BlogListState {
       (blog) => (isBlogPasses(blog, filters) ? blog : null),
     ).filter(Boolean);
     this.filters = filters;
+
+    createTimeStamp({
+      action: TimeTrackingActions.COMMIT, source: TimeTrackingSources.MobxV1, title: "filter update", time: Date.now(),
+    });
   }
 
   @action removeBlog = (id: string): void => {

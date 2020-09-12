@@ -44,6 +44,7 @@
     "no-underscore-dangle": "off",
     "no-param-reassign": "off",
     "explicit-module-boundary-types": "off",
-    "no-restricted-syntax": "off"
+    "no-restricted-syntax": "off",
+    "no-console": "off"
   }
 }

@@ -6,6 +6,9 @@ import { blogListState } from "../../store/list";
 import { BlogItem } from "../../../../components/BlogItem";
 import { Filters } from "../../../../components/Filters";
 
+import { TimeTrackingActions, TimeTrackingSources } from "../../../../../shared/interfaces";
+import { createTimeStamp } from "../../../../axios/time";
+
 import {
   BlogListBodyWrapper, BlogListContent, BlogListHeaderWrapper, BlogListSidebar, BlogListWrapper,
 } from "./styled";
@@ -20,6 +23,14 @@ export const BlogListPage = observer((): JSX.Element => {
   useEffect(() => {
     fetchBlogList();
   }, []);
+
+  useEffect(() => {
+    if (blogs) {
+      createTimeStamp({
+        action: TimeTrackingActions.COMMIT, source: TimeTrackingSources.MobxV1, title: "filter update", time: Date.now(),
+      });
+    }
+  }, [blogs]);
 
   if (loading) return <Spin />;
 

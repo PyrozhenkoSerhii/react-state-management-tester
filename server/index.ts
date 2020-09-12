@@ -9,6 +9,7 @@ import * as swaggerUi from "swagger-ui-express";
 import "./utils/database";
 import { logger } from "./utils/logger";
 import { blogsRouter } from "./blogs/controller";
+import { trackingRouter } from "./tracking/controller";
 import { errorHandler } from "./middleware/errorHandler";
 
 const app: express.Application = express();
@@ -58,6 +59,7 @@ app.get("/context/v1", (req, res) => {
 });
 
 app.use("/api", blogsRouter);
+app.use("/api", trackingRouter);
 
 app.use(errorHandler);
 

@@ -3,14 +3,18 @@ import { Checkbox, Input, Slider } from "antd";
 import {
   IBooleanFilter, IValueFilter, IRangeFilter, isBooleanFilter, isRangeFilter, isValueFilter,
 } from "../../interfaces/Filter";
+import { TimeTrackingActions, TimeTrackingSources } from "../../../shared/interfaces";
+import { createTimeStamp } from "../../axios/time";
 
 import {
   BooleanFilterItem, FiltersWrapper, RangeFilterItem, ValueFilterItem,
 } from "./styled";
 
+type onChangeFunction = (title: string, value: boolean | number, secondValue?: number) => void;
+
 type TProps = {
   filters: Array<IBooleanFilter|IRangeFilter|IValueFilter>;
-  onChange: (title: string, value: boolean | number, secondValue?: number) => void;
+  onChange: onChangeFunction;
 }
 
 export const Filters = ({ filters, onChange }: TProps): JSX.Element => (
@@ -22,7 +26,12 @@ export const Filters = ({ filters, onChange }: TProps): JSX.Element => (
             <Checkbox
               id={filter.title}
               checked={filter.value}
-              onChange={({ target }) => onChange(filter.title, target.checked)}
+              onChange={({ target }) => {
+                onChange(filter.title, target.checked);
+                createTimeStamp({
+                  action: TimeTrackingActions.INIT, source: TimeTrackingSources.MobxV1, title: "filter update", time: Date.now(),
+                });
+              }}
             >
               {filter.title}
             </Checkbox>
