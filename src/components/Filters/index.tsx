@@ -4,9 +4,7 @@ import {
   IBooleanFilter, IValueFilter, IRangeFilter, isBooleanFilter, isRangeFilter, isValueFilter,
 } from "../../interfaces/Filter";
 
-import {
-  BooleanFilterItem, FiltersWrapper, RangeFilterItem, ValueFilterItem,
-} from "./styled";
+import { BooleanFilterItem, FiltersWrapper, RangeFilterItem, ValueFilterItem } from "./styled";
 
 type TProps = {
   filters: Array<IBooleanFilter|IRangeFilter|IValueFilter>;

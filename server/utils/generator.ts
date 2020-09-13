@@ -7,7 +7,6 @@ import { IBlog } from "../blogs/model";
 import { IComment } from "../comments/model";
 import { IUser } from "../users/model";
 
-
 type TMockComment = Omit<IComment, "author"|"comments">;
 type TMockBlog = Omit<IBlog, "author"|"comments"|"wordsCount">;
 
@@ -21,7 +20,6 @@ const lorem = new LoremIpsum({
     min: 4,
   },
 });
-
 
 const generateTags = (): Array<string> => {
   const result: Array<string> = [];
@@ -39,7 +37,6 @@ const generateTags = (): Array<string> => {
   return result;
 };
 
-
 export const generateBlog = (amount: number): Array<TMockBlog> => {
   const result: Array<TMockBlog> = [];
 
@@ -56,7 +53,6 @@ export const generateBlog = (amount: number): Array<TMockBlog> => {
   return result;
 };
 
-
 export const generateComments = (amount: number): Array<TMockComment> => {
   const result: Array<TMockComment> = [];
 
@@ -69,7 +65,6 @@ export const generateComments = (amount: number): Array<TMockComment> => {
 
   return result;
 };
-
 
 export const generateUsers = (amount: number): Array<IUser> => {
   const result: Array<IUser> = [];

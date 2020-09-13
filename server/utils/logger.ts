@@ -6,7 +6,6 @@ const { combine } = format;
 
 const enviroment = process.env.NODE_ENV || "development";
 
-
 export const logger = createLogger({
   format: combine(
     format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),

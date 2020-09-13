@@ -32,9 +32,8 @@ class BlogListState {
       position: TrackerPositions.MobxActionInit,
       action: TrackerActions.FetchBlogList,
       state: "finished",
-      timestamp: Date.now(),
+      time: Date.now(),
     });
-
     this.loading = true;
     try {
       const blogs = await fetchBlogList();
@@ -45,7 +44,7 @@ class BlogListState {
         position: TrackerPositions.MobxActionCommit,
         action: TrackerActions.FetchBlogList,
         state: "started",
-        timestamp: Date.now(),
+        time: Date.now(),
       });
 
       runInAction(() => {
@@ -63,6 +62,14 @@ class BlogListState {
   }
 
   @action updateFilters = (title: string, value: boolean | number, secondValue: number) => {
+    TrackerService.setTimeStamps({
+      source: TrackerSources.MobxV1,
+      position: TrackerPositions.MobxActionInit,
+      action: TrackerActions.FilterBlogList,
+      state: "finished",
+      time: Date.now(),
+    });
+
     const filters = this.filters.map((filter) => {
       if (filter.title !== title) return filter;
       const updated = filter;
@@ -79,6 +86,13 @@ class BlogListState {
       return updated;
     });
 
+    TrackerService.setTimeStamps({
+      source: TrackerSources.MobxV1,
+      position: TrackerPositions.MobxActionCommit,
+      action: TrackerActions.FilterBlogList,
+      state: "started",
+      time: Date.now(),
+    });
     this.blogs = this.defaultBlogs.map(
       (blog) => (isBlogPasses(blog, filters) ? blog : null),
     ).filter(Boolean);

@@ -1,39 +1,78 @@
-import { createContext } from "react";
-import { observable, action } from "mobx";
+import {
+  OperationPartTimestamp,
+  OperationPart,
+  ReduxOperation,
+  MobxObservableActionOperation,
+  ReduxSagaOperation,
+  TrackerSources,
+  TrackerPositions,
+} from "../../shared/interfaces";
 
-import { TrackerTimestamp } from "../../shared/interfaces";
-import { sendTrackerInfo } from "../axios/tracker";
+import {
+  sendMobxObservableActionOperationTrackerInfo,
+  sendReduxOperationTrackerInfo,
+  sendReduxSagaOperationTrackerInfo,
+} from "../axios/tracker";
 
-const searchTimeStamp = (x: TrackerTimestamp, y: TrackerTimestamp) => x.source === y.source && x.action === y.action && x.position === y.position && x.state === "started";
+const searchOperationPartTimestamp = (x: OperationPartTimestamp, y: OperationPartTimestamp) => x.source === y.source && x.action === y.action && x.position === y.position && x.state === "started";
 
 class TrackerServiceClass {
-  @observable timestamps: Array<TrackerTimestamp> = [];
+  operationPartTimestampList: Array<OperationPartTimestamp> = [];
 
-  @action setTimeStamps = (timestamp: TrackerTimestamp) => {
-    console.log(timestamp);
-    console.log(this.timestamps);
-    const index = this.timestamps.findIndex((x) => searchTimeStamp(x, timestamp));
+  reduxOperation: ReduxOperation = null;
 
-    const started = this.timestamps[index];
+  reduxSagaOperation: ReduxSagaOperation = null;
+
+  mobxOperation: MobxObservableActionOperation = null;
+
+  public setTimeStamps = (operationPartTimestamp: OperationPartTimestamp) => {
+    console.log(operationPartTimestamp);
+
+    const index = this.operationPartTimestampList.findIndex(
+      (x) => searchOperationPartTimestamp(x, operationPartTimestamp),
+    );
+
+    const started = this.operationPartTimestampList[index];
 
     if (!started) {
-      this.timestamps.push(timestamp);
+      this.operationPartTimestampList.push(operationPartTimestamp);
       return;
     }
 
-    sendTrackerInfo({
-      action: started.action,
-      position: started.position,
+    this.setOperationPart({
       source: started.source,
-      title: started.title,
-      time: timestamp.timestamp - started.timestamp,
+      position: started.position,
+      action: started.action,
+      time: operationPartTimestamp.time - started.time,
     });
 
-    console.log(started, index);
-    this.timestamps.splice(index, 1);
+    this.operationPartTimestampList.splice(index, 1);
+  }
+
+  private setOperationPart = (operationPart: OperationPart) => {
+    console.log(operationPart);
+    switch (operationPart.source) {
+      case TrackerSources.MobxV1:
+        console.log(this.mobxOperation, operationPart.position);
+        if (!this.mobxOperation && operationPart.position === TrackerPositions.MobxActionInit) {
+          this.mobxOperation = {
+            source: operationPart.source,
+            action: operationPart.action,
+            initTime: operationPart.time,
+            commitTime: null,
+          };
+          console.log(this.mobxOperation);
+        } else if (operationPart.position === TrackerPositions.MobxActionCommit) {
+          const operation = this.mobxOperation;
+          operation.commitTime = operationPart.time;
+          sendMobxObservableActionOperationTrackerInfo(operation);
+          this.mobxOperation = null;
+        }
+        break;
+      default:
+        break;
+    }
   }
 }
 
 export const TrackerService = new TrackerServiceClass();
-
-export const TrackerServiceContext = createContext(TrackerServiceClass);

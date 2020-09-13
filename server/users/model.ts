@@ -1,6 +1,5 @@
 import { Schema, model, Document } from "mongoose";
 
-
 export interface IUser {
   username: string;
   email: string;
@@ -29,6 +28,5 @@ const UserSchema = new Schema({
   versionKey: false,
   timestamps: true,
 });
-
 
 export const UserModel = model<TUser>("User", UserSchema);

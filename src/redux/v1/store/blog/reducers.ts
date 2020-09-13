@@ -37,7 +37,7 @@ export const blogsReducer = (
         position: TrackerPositions.ReduxReduce,
         action: TrackerActions.FetchBlogList,
         state: "finished",
-        timestamp: Date.now(),
+        time: Date.now(),
       });
 
       TrackerService.setTimeStamps({
@@ -45,7 +45,7 @@ export const blogsReducer = (
         position: TrackerPositions.ReduxCommit,
         action: TrackerActions.FetchBlogList,
         state: "started",
-        timestamp: Date.now(),
+        time: Date.now(),
       });
 
       return {
@@ -73,7 +73,7 @@ export const blogsReducer = (
         position: TrackerPositions.ReduxReduce,
         action: TrackerActions.FilterBlogList,
         state: "finished",
-        timestamp: Date.now(),
+        time: Date.now(),
       });
 
       const { title, value, secondValue } = action.payload;
@@ -103,7 +103,7 @@ export const blogsReducer = (
         position: TrackerPositions.ReduxCommit,
         action: TrackerActions.FilterBlogList,
         state: "started",
-        timestamp: Date.now(),
+        time: Date.now(),
       });
 
       return {

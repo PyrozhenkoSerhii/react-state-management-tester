@@ -16,22 +16,37 @@ export enum TrackerSources {
 export enum TrackerActions {
   FetchBlogList = 1,
   FilterBlogList = 2,
-  UpdateFilter = 3,
 }
 
-export interface TrackerRequest {
+export interface OperationPart {
   source: TrackerSources;
   action: TrackerActions;
   position: TrackerPositions;
   time: number;
-  title?: string;
 }
 
-export interface TrackerTimestamp {
+export type OperationPartTimestamp = OperationPart & {
+  state: "started"|"finished";
+}
+
+export interface ReduxSagaOperation {
   source: TrackerSources;
   action: TrackerActions;
-  position: TrackerPositions;
-  state: "started"|"finished";
-  timestamp: number;
-  title?: string;
+  sagaTime: number;
+  reduceTime: number;
+  commitTime: number;
+}
+
+export interface ReduxOperation {
+  source: TrackerSources;
+  action: TrackerActions;
+  reduceTime: number;
+  commitTime: number;
+}
+
+export interface MobxObservableActionOperation {
+  source: TrackerSources;
+  action: TrackerActions;
+  initTime: number;
+  commitTime: number;
 }

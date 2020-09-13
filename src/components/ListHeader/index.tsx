@@ -10,7 +10,6 @@ type TProps = {
   }]
 }
 
-
 export const ListHeader = ({ title }: TProps): JSX.Element => (
   <HeaderWrapper>
     <HeaderTitle>{title}</HeaderTitle>

@@ -1,30 +1,16 @@
 import { Request, Response, Router } from "express";
 
 import { BlogModel } from "./model";
+import { API } from "../../shared/api";
 
 export const blogsRouter = Router();
 
-/**
- * @swagger
- * /api/blogs:
- *  get:
- *    description: Used to request all blogs
- *    responses:
- *      '200':
- *        description: A successful response
- *        content: {
- *          application/json
- *        }
- *  post:
- *    desccription: Create new blog
- */
-blogsRouter.get("/blogs", async (req: Request, res: Response) => {
+blogsRouter.get(API.BLOGS, async (req: Request, res: Response) => {
   const blogs = await BlogModel.find(req.query);
   res.status(200).send(blogs);
 });
 
-
-blogsRouter.post("/blogs", async (req: Request, res: Response) => {
+blogsRouter.post(API.BLOGS, async (req: Request, res: Response) => {
   const blog = new BlogModel({ ...req.body });
 
   const validationError = blog.validateSync();

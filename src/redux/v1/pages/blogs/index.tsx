@@ -26,7 +26,7 @@ export const BlogListPage = (): JSX.Element => {
       position: TrackerPositions.ReduxSaga,
       action: TrackerActions.FetchBlogList,
       state: "started",
-      timestamp: Date.now(),
+      time: Date.now(),
     });
     dispatch(fetchBlogsAsync());
     setFromRedux(TrackerActions.FetchBlogList);
@@ -39,7 +39,7 @@ export const BlogListPage = (): JSX.Element => {
         position: TrackerPositions.ReduxCommit,
         action: TrackerActions.FilterBlogList,
         state: "finished",
-        timestamp: Date.now(),
+        time: Date.now(),
       });
       setFromRedux(null);
     }
@@ -49,7 +49,7 @@ export const BlogListPage = (): JSX.Element => {
         position: TrackerPositions.ReduxCommit,
         action: TrackerActions.FetchBlogList,
         state: "finished",
-        timestamp: Date.now(),
+        time: Date.now(),
       });
       setFromRedux(null);
     }
@@ -61,7 +61,7 @@ export const BlogListPage = (): JSX.Element => {
       position: TrackerPositions.ReduxReduce,
       action: TrackerActions.FilterBlogList,
       state: "started",
-      timestamp: Date.now(),
+      time: Date.now(),
     });
     dispatch(updateFilters(title, value, secondValue));
     setFromRedux(TrackerActions.FilterBlogList);

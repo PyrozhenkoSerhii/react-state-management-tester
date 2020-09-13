@@ -5,10 +5,7 @@ import { LikeFilled, DislikeFilled } from "@ant-design/icons";
 import { IBlog } from "../../interfaces/Blog";
 import { TagComponent } from "./Tag";
 import { shortenText } from "./utils";
-import {
-  TagsWrapper, HeaderWrapper, MetaWrapper, FooterWrapper,
-} from "./styled";
-
+import { TagsWrapper, HeaderWrapper, MetaWrapper, FooterWrapper } from "./styled";
 
 const { Meta } = Card;
 
@@ -45,7 +42,6 @@ export const BlogItem = ({ blog }: TProps): JSX.Element => (
         value={blog.wordsCount}
       />
     </FooterWrapper>
-
 
   </Card>
 );

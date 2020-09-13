@@ -16,7 +16,7 @@ function* fetchBlogsAsync(): SagaIterator {
       position: TrackerPositions.ReduxSaga,
       action: TrackerActions.FetchBlogList,
       state: "finished",
-      timestamp: Date.now(),
+      time: Date.now(),
     });
     const blogs: Array<IBlog> = yield call(fetchBlogList);
 
@@ -27,7 +27,7 @@ function* fetchBlogsAsync(): SagaIterator {
       position: TrackerPositions.ReduxReduce,
       action: TrackerActions.FetchBlogList,
       state: "started",
-      timestamp: Date.now(),
+      time: Date.now(),
     });
     yield put<BlogTypes.IFetchBlogsActionSuccess>({
       type: BlogTypes.FETCH_BLOGS_SUCCESS,

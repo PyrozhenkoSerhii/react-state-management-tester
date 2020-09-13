@@ -23,7 +23,6 @@ const populate = async () => {
 
   const usersId = users.map((user) => user._id);
 
-
   await CommentModel.deleteMany({});
 
   const comments = await CommentModel.insertMany(mockComments.map((comment) => <IComment>{
@@ -33,7 +32,6 @@ const populate = async () => {
   }));
 
   const commentsIds = comments.map((comment) => comment._id);
-
 
   await BlogModel.deleteMany({});
 
@@ -46,6 +44,5 @@ const populate = async () => {
 
   process.exit();
 };
-
 
 populate();

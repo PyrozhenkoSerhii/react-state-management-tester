@@ -40,12 +40,10 @@ export interface IUpdateFilters {
   }
 }
 
-
 export type BlogActionTypes = IFetchBlogsAction
   | IFetchBlogsActionError
   | IFetchBlogsActionSuccess
   | IUpdateFilters
-
 
 export interface IBlogsState {
   defaultBlogs: Array<IBlog>;

@@ -26,21 +26,31 @@ export const BlogListPage = observer((): JSX.Element => {
       position: TrackerPositions.MobxActionInit,
       action: TrackerActions.FetchBlogList,
       state: "started",
-      timestamp: Date.now(),
+      time: Date.now(),
     });
     fetchBlogList();
     setFromMobx(TrackerActions.FetchBlogList);
   }, []);
 
   useEffect(() => {
-    if (fromMobx) {
+    if (fromMobx === TrackerActions.FetchBlogList) {
       TrackerService.setTimeStamps({
         source: TrackerSources.MobxV1,
         position: TrackerPositions.MobxActionCommit,
         action: TrackerActions.FetchBlogList,
         state: "finished",
-        timestamp: Date.now(),
+        time: Date.now(),
       });
+      setFromMobx(null);
+    } else if (fromMobx === TrackerActions.FilterBlogList) {
+      TrackerService.setTimeStamps({
+        source: TrackerSources.MobxV1,
+        position: TrackerPositions.MobxActionCommit,
+        action: TrackerActions.FilterBlogList,
+        state: "finished",
+        time: Date.now(),
+      });
+      setFromMobx(null);
     }
   }, [blogs]);
 
@@ -51,6 +61,18 @@ export const BlogListPage = observer((): JSX.Element => {
       <Alert message={error} type="error" closable />
     );
   }
+
+  const updateBlogs = (title: string, value: boolean | number, secondValue: number) => {
+    TrackerService.setTimeStamps({
+      source: TrackerSources.MobxV1,
+      position: TrackerPositions.MobxActionInit,
+      action: TrackerActions.FilterBlogList,
+      state: "started",
+      time: Date.now(),
+    });
+    updateFilters(title, value, secondValue);
+    setFromMobx(TrackerActions.FilterBlogList);
+  };
 
   return (
     <BlogListWrapper>
@@ -63,7 +85,7 @@ export const BlogListPage = observer((): JSX.Element => {
         </BlogListContent>
         <BlogListSidebar>
           {filters && (
-            <Filters filters={filters} onChange={updateFilters} />
+            <Filters filters={filters} onChange={updateBlogs} />
           )}
         </BlogListSidebar>
       </BlogListBodyWrapper>

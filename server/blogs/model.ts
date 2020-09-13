@@ -1,6 +1,4 @@
-import {
-  Schema, model, Document, Types,
-} from "mongoose";
+import { Schema, model, Document, Types } from "mongoose";
 
 import { blogTags } from "./tags";
 import { TUser } from "../users/model";
@@ -56,6 +54,5 @@ const BlogSchema: Schema = new Schema({
     ref: "Comment",
   }],
 });
-
 
 export const BlogModel = model<TBlog>("Blog", BlogSchema);

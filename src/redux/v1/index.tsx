@@ -10,7 +10,6 @@ import "../../style/main.less";
 
 import { BlogListPage } from "./pages/blogs";
 
-
 ReactDOM.render(
   <BrowserRouter>
     <Provider store={store}>
