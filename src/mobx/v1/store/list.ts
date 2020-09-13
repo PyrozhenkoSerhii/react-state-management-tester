@@ -10,6 +10,8 @@ import {
   IBooleanFilter, IValueFilter, IRangeFilter, isBooleanFilter, isValueFilter, isRangeFilter,
 } from "../../../interfaces/Filter";
 
+import { TrackerService } from "../../../services/tracker";
+import { TrackerActions, TrackerSources, TrackerPositions } from "../../../../shared/interfaces";
 
 class BlogListState {
   @observable defaultBlogs: Array<IBlog> = [];
@@ -25,10 +27,26 @@ class BlogListState {
   @observable error: string | null = null;
 
   @action fetchBlogList = async () => {
+    TrackerService.setTimeStamps({
+      source: TrackerSources.MobxV1,
+      position: TrackerPositions.MobxActionInit,
+      action: TrackerActions.FetchBlogList,
+      state: "finished",
+      timestamp: Date.now(),
+    });
+
     this.loading = true;
     try {
       const blogs = await fetchBlogList();
       const filters = generateFilters(blogs);
+
+      TrackerService.setTimeStamps({
+        source: TrackerSources.MobxV1,
+        position: TrackerPositions.MobxActionCommit,
+        action: TrackerActions.FetchBlogList,
+        state: "started",
+        timestamp: Date.now(),
+      });
 
       runInAction(() => {
         this.defaultFilters = filters;
@@ -43,7 +61,6 @@ class BlogListState {
       this.error = err;
     }
   }
-
 
   @action updateFilters = (title: string, value: boolean | number, secondValue: number) => {
     const filters = this.filters.map((filter) => {

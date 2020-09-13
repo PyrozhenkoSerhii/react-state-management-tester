@@ -32,6 +32,22 @@ export const blogsReducer = (
         loading: true,
       };
     case FETCH_BLOGS_SUCCESS:
+      TrackerService.setTimeStamps({
+        source: TrackerSources.ReduxV1,
+        position: TrackerPositions.ReduxReduce,
+        action: TrackerActions.FetchBlogList,
+        state: "finished",
+        timestamp: Date.now(),
+      });
+
+      TrackerService.setTimeStamps({
+        source: TrackerSources.ReduxV1,
+        position: TrackerPositions.ReduxCommit,
+        action: TrackerActions.FetchBlogList,
+        state: "started",
+        timestamp: Date.now(),
+      });
+
       return {
         ...state,
         loading: false,

@@ -6,7 +6,6 @@ import "../../style/main.less";
 
 import { BlogListPage } from "./pages/blogs";
 
-
 render(
   <BrowserRouter>
     <BlogListPage />

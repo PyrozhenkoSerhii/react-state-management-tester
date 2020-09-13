@@ -18,7 +18,6 @@ class TrackerServiceClass {
 
     if (!started) {
       this.timestamps.push(timestamp);
-      console.log("none");
       return;
     }
 

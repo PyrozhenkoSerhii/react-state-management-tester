@@ -19,13 +19,21 @@ export const BlogListPage = (): JSX.Element => {
 
   const { blogs, error, loading, filters } = useSelector((state: IApplicationState) => state.blogs);
 
+  const [fromRedux, setFromRedux] = useState(null);
   useEffect(() => {
+    TrackerService.setTimeStamps({
+      source: TrackerSources.ReduxV1,
+      position: TrackerPositions.ReduxSaga,
+      action: TrackerActions.FetchBlogList,
+      state: "started",
+      timestamp: Date.now(),
+    });
     dispatch(fetchBlogsAsync());
+    setFromRedux(TrackerActions.FetchBlogList);
   }, []);
 
-  const [fromRedux, setFromRedux] = useState(false);
   useEffect(() => {
-    if (fromRedux) {
+    if (fromRedux === TrackerActions.FilterBlogList) {
       TrackerService.setTimeStamps({
         source: TrackerSources.ReduxV1,
         position: TrackerPositions.ReduxCommit,
@@ -33,7 +41,17 @@ export const BlogListPage = (): JSX.Element => {
         state: "finished",
         timestamp: Date.now(),
       });
-      setFromRedux(false);
+      setFromRedux(null);
+    }
+    if (fromRedux === TrackerActions.FetchBlogList) {
+      TrackerService.setTimeStamps({
+        source: TrackerSources.ReduxV1,
+        position: TrackerPositions.ReduxCommit,
+        action: TrackerActions.FetchBlogList,
+        state: "finished",
+        timestamp: Date.now(),
+      });
+      setFromRedux(null);
     }
   }, [blogs]);
 
@@ -46,7 +64,7 @@ export const BlogListPage = (): JSX.Element => {
       timestamp: Date.now(),
     });
     dispatch(updateFilters(title, value, secondValue));
-    setFromRedux(true);
+    setFromRedux(TrackerActions.FilterBlogList);
   };
 
   if (loading) return <Spin />;

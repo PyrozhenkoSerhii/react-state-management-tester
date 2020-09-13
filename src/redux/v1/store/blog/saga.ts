@@ -6,12 +6,29 @@ import { fetchBlogList } from "../../../../axios/blogs";
 import { IBlog } from "../../../../interfaces/Blog";
 import { generateFilters } from "../../../../utils/filters";
 
+import { TrackerService } from "../../../../services/tracker";
+import { TrackerSources, TrackerActions, TrackerPositions } from "../../../../../shared/interfaces";
+
 function* fetchBlogsAsync(): SagaIterator {
   try {
+    TrackerService.setTimeStamps({
+      source: TrackerSources.ReduxV1,
+      position: TrackerPositions.ReduxSaga,
+      action: TrackerActions.FetchBlogList,
+      state: "finished",
+      timestamp: Date.now(),
+    });
     const blogs: Array<IBlog> = yield call(fetchBlogList);
 
     const filters = generateFilters(blogs);
 
+    TrackerService.setTimeStamps({
+      source: TrackerSources.ReduxV1,
+      position: TrackerPositions.ReduxReduce,
+      action: TrackerActions.FetchBlogList,
+      state: "started",
+      timestamp: Date.now(),
+    });
     yield put<BlogTypes.IFetchBlogsActionSuccess>({
       type: BlogTypes.FETCH_BLOGS_SUCCESS,
       payload: { blogs, filters },

@@ -6,20 +6,43 @@ import { blogListState } from "../../store/list";
 import { BlogItem } from "../../../../components/BlogItem";
 import { Filters } from "../../../../components/Filters";
 
-import {
-  BlogListBodyWrapper, BlogListContent, BlogListHeaderWrapper, BlogListSidebar, BlogListWrapper,
-} from "./styled";
+import { BlogListBodyWrapper, BlogListContent, BlogListHeaderWrapper, BlogListSidebar, BlogListWrapper } from "./styled";
 
-const { useContext, useEffect } = React;
+import { TrackerService } from "../../../../services/tracker";
+import { TrackerActions, TrackerSources, TrackerPositions } from "../../../../../shared/interfaces";
+
+const { useContext, useEffect, useState } = React;
 
 export const BlogListPage = observer((): JSX.Element => {
   const {
     fetchBlogList, loading, error, filters, blogs, updateFilters,
   } = useContext(blogListState);
 
+  const [fromMobx, setFromMobx] = useState(null);
+
   useEffect(() => {
+    TrackerService.setTimeStamps({
+      source: TrackerSources.MobxV1,
+      position: TrackerPositions.MobxActionInit,
+      action: TrackerActions.FetchBlogList,
+      state: "started",
+      timestamp: Date.now(),
+    });
     fetchBlogList();
+    setFromMobx(TrackerActions.FetchBlogList);
   }, []);
+
+  useEffect(() => {
+    if (fromMobx) {
+      TrackerService.setTimeStamps({
+        source: TrackerSources.MobxV1,
+        position: TrackerPositions.MobxActionCommit,
+        action: TrackerActions.FetchBlogList,
+        state: "finished",
+        timestamp: Date.now(),
+      });
+    }
+  }, [blogs]);
 
   if (loading) return <Spin />;
 

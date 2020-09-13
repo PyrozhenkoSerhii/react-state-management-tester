@@ -1,22 +1,22 @@
 export enum TrackerPositions {
-  ReduxReduce,
-  ReduxSaga,
-  ReduxCommit,
-  MobxActionInit,
-  MobxActionCommit,
+  ReduxReduce = 1,
+  ReduxSaga = 2,
+  ReduxCommit = 3,
+  MobxActionInit = 4,
+  MobxActionCommit = 5,
 }
 
 export enum TrackerSources {
-  ReduxV1,
-  ReduxV2,
-  MobxV1,
-  ContextV1
+  ReduxV1 = 1,
+  ReduxV2 = 2,
+  MobxV1 = 3,
+  ContextV1 = 4
 }
 
 export enum TrackerActions {
-  FetchBlogList,
-  FilterBlogList,
-  UpdateFilter,
+  FetchBlogList = 1,
+  FilterBlogList = 2,
+  UpdateFilter = 3,
 }
 
 export interface TrackerRequest {
