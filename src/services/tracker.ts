@@ -49,11 +49,13 @@ class TrackerServiceClass {
     this.operationPartTimestampList.splice(index, 1);
   }
 
+  /**
+   * TODO: refactor this garbage
+   */
   private setOperationPart = (operationPart: OperationPart) => {
     console.log(operationPart);
     switch (operationPart.source) {
       case TrackerSources.MobxV1:
-        console.log(this.mobxOperation, operationPart.position);
         if (!this.mobxOperation && operationPart.position === TrackerPositions.MobxActionInit) {
           this.mobxOperation = {
             source: operationPart.source,
@@ -61,7 +63,6 @@ class TrackerServiceClass {
             initTime: operationPart.time,
             commitTime: null,
           };
-          console.log(this.mobxOperation);
         } else if (operationPart.position === TrackerPositions.MobxActionCommit) {
           const operation = this.mobxOperation;
           operation.commitTime = operationPart.time;
@@ -70,6 +71,48 @@ class TrackerServiceClass {
         }
         break;
       default:
+      case TrackerSources.ReduxV1:
+        if (!this.reduxSagaOperation && operationPart.position === TrackerPositions.ReduxSaga) {
+          this.reduxSagaOperation = {
+            source: operationPart.source,
+            action: operationPart.action,
+            sagaTime: operationPart.time,
+            reduceTime: null,
+            commitTime: null,
+          };
+          return;
+        }
+        if (this.reduxSagaOperation) {
+          switch (operationPart.position) {
+            case TrackerPositions.ReduxReduce:
+              this.reduxSagaOperation.reduceTime = operationPart.time;
+              break;
+            case TrackerPositions.ReduxCommit:
+              sendReduxSagaOperationTrackerInfo({
+                ...this.reduxSagaOperation,
+                commitTime: operationPart.time,
+              });
+              this.reduxSagaOperation = null;
+              break;
+            default:
+              break;
+          }
+          return;
+        }
+        if (!this.reduxOperation && operationPart.position === TrackerPositions.ReduxReduce) {
+          this.reduxOperation = {
+            source: operationPart.source,
+            action: operationPart.action,
+            reduceTime: operationPart.time,
+            commitTime: null,
+          };
+          return;
+        }
+        if (this.reduxOperation && operationPart.position === TrackerPositions.ReduxCommit) {
+          this.reduxOperation.commitTime = operationPart.time;
+          sendReduxOperationTrackerInfo(this.reduxOperation);
+          this.reduxOperation = null;
+        }
         break;
     }
   }
