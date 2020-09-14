@@ -29,24 +29,31 @@ export type OperationPartTimestamp = OperationPart & {
   state: "started"|"finished";
 }
 
-export interface ReduxSagaOperation {
+interface BaseOperation {
   source: TrackerSources;
   action: TrackerActions;
+}
+
+export interface ReduxSagaOperationTime {
   sagaTime: number;
   reduceTime: number;
   commitTime: number;
 }
 
-export interface ReduxOperation {
-  source: TrackerSources;
-  action: TrackerActions;
+export interface ReduxOperationTime {
   reduceTime: number;
   commitTime: number;
 }
 
-export interface MobxObservableActionOperation {
-  source: TrackerSources;
-  action: TrackerActions;
+export interface MobxOperationTime {
   initTime: number;
   commitTime: number;
 }
+
+export interface ReduxSagaOperation extends BaseOperation, ReduxSagaOperationTime {}
+
+export interface ReduxOperation extends BaseOperation, ReduxOperationTime {}
+
+export interface MobxObservableActionOperation extends BaseOperation, MobxOperationTime {}
+
+export type TrackerDataList = Array<MobxObservableActionOperation|ReduxOperation|ReduxSagaOperation>
