@@ -2,6 +2,8 @@ import { instance } from "./api";
 import { MobxObservableActionOperation, ReduxOperation, ReduxSagaOperation } from "../../shared/interfaces";
 import { API } from "../../shared/api";
 
+import { Tracker } from "../../server/tracker/model";
+
 export const sendReduxOperationTrackerInfo = async (
   operation: ReduxOperation,
 ): Promise<boolean> => {
@@ -30,6 +32,15 @@ export const sendMobxObservableActionOperationTrackerInfo = async (
   try {
     await instance.post(API.TRACKER_MOBX, operation);
     return true;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const getTrackers = async (): Promise<Array<Tracker>> => {
+  try {
+    const response = await instance.get<Array<Tracker>>(API.TRACKER);
+    return response.data;
   } catch (err) {
     throw new Error(err);
   }

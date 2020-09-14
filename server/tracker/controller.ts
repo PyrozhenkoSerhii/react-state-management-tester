@@ -1,4 +1,4 @@
-import { Router, Response } from "express";
+import { Router, Response, Request } from "express";
 
 import { API } from "../../shared/api";
 import { TypedRequest } from "../interfaces/Request";
@@ -78,4 +78,9 @@ trackerRouter.post(API.TRACKER_MOBX, (
   console.log(`[${TrackerSources[source]}][${TrackerActions[action]}] [mobx action+observable variation]:  ${initTime}ms + ${commitTime}ms`);
 
   res.sendStatus(201);
+});
+
+trackerRouter.get(API.TRACKER, async (req: Request, res: Response) => {
+  const trackers = await TrackerModel.find({});
+  return res.status(200).send(trackers);
 });
