@@ -23,6 +23,7 @@ export interface OperationPart {
   action: TrackerActions;
   position: TrackerPositions;
   time: number;
+  dataSize?: number;
 }
 
 export type OperationPartTimestamp = OperationPart & {
@@ -32,6 +33,7 @@ export type OperationPartTimestamp = OperationPart & {
 interface BaseOperation {
   source: TrackerSources;
   action: TrackerActions;
+  dataSize: number;
 }
 
 export interface ReduxSagaOperationTime {

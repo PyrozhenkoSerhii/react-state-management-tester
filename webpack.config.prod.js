@@ -10,6 +10,7 @@ module.exports = merge(baseConfig, {
     "redux/v2": "./src/redux/v2/index.tsx",
     "mobx/v1": "./src/mobx/v1/index.tsx",
     "context/v1": "./src/context/v1/index.tsx",
+    "presentation": "./src/presentation/index.tsx",
   },
   output: {
     path: path.resolve(__dirname, "./dist"),
@@ -38,6 +39,12 @@ module.exports = merge(baseConfig, {
       inject: true,
       chunks: ["context/v1"],
       filename: "public/context/v1/index.html",
+      template: "src/index.html",
+    }),
+    new HtmlWebpackPlugin({
+      inject: true,
+      chunks: ["presentation"],
+      filename: "public/presentation/index.html",
       template: "src/index.html",
     }),
   ],

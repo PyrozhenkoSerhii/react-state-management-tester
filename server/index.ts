@@ -57,6 +57,10 @@ app.get("/context/v1", (req, res) => {
   res.sendFile(path.join(__dirname, "../dist/public/context/v1", "index.html"));
 });
 
+app.get("/presentation", (req, res) => {
+  res.sendFile(path.join(__dirname, "../dist/public/presentation", "index.html"));
+});
+
 app.use("/api", blogsRouter);
 app.use("/api", trackerRouter);
 

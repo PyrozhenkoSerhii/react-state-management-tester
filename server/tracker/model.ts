@@ -13,6 +13,7 @@ export interface ITracker<T> {
   source: TrackerSources;
   action: TrackerActions;
   time: T;
+  dataSize: number;
 }
 
 export type Tracker = ITracker<TrackerTime> & Document
@@ -21,13 +22,19 @@ const TrackerSchema = new Schema({
   source: {
     type: Number,
     enum: Object.values(TrackerSources).filter((v) => typeof v === "number"),
+    required: true,
   },
   action: {
     type: Number,
     enum: Object.values(TrackerSources).filter((v) => typeof v === "number"),
+    required: true,
   },
   // TODO: use actual type
   time: Object,
+  dataSize: {
+    type: Number,
+    required: true,
+  },
 }, {
   versionKey: false,
   timestamps: true,

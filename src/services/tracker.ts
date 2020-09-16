@@ -44,6 +44,7 @@ class TrackerServiceClass {
       position: started.position,
       action: started.action,
       time: operationPartTimestamp.time - started.time,
+      dataSize: operationPartTimestamp.dataSize || started.dataSize,
     });
 
     this.operationPartTimestampList.splice(index, 1);
@@ -62,10 +63,12 @@ class TrackerServiceClass {
             action: operationPart.action,
             initTime: operationPart.time,
             commitTime: null,
+            dataSize: operationPart.dataSize || null,
           };
         } else if (operationPart.position === TrackerPositions.MobxActionCommit) {
           const operation = this.mobxOperation;
           operation.commitTime = operationPart.time;
+          operation.dataSize = operationPart.dataSize;
           sendMobxObservableActionOperationTrackerInfo(operation);
           this.mobxOperation = null;
         }
@@ -79,6 +82,7 @@ class TrackerServiceClass {
             sagaTime: operationPart.time,
             reduceTime: null,
             commitTime: null,
+            dataSize: operationPart.dataSize || null,
           };
           return;
         }
@@ -91,6 +95,8 @@ class TrackerServiceClass {
               sendReduxSagaOperationTrackerInfo({
                 ...this.reduxSagaOperation,
                 commitTime: operationPart.time,
+                dataSize: operationPart.dataSize,
+
               });
               this.reduxSagaOperation = null;
               break;
@@ -105,11 +111,13 @@ class TrackerServiceClass {
             action: operationPart.action,
             reduceTime: operationPart.time,
             commitTime: null,
+            dataSize: operationPart.dataSize || null,
           };
           return;
         }
         if (this.reduxOperation && operationPart.position === TrackerPositions.ReduxCommit) {
           this.reduxOperation.commitTime = operationPart.time;
+          this.reduxOperation.dataSize = operationPart.dataSize;
           sendReduxOperationTrackerInfo(this.reduxOperation);
           this.reduxOperation = null;
         }

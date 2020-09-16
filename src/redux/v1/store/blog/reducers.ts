@@ -46,6 +46,7 @@ export const blogsReducer = (
         action: TrackerActions.FetchBlogList,
         state: "started",
         time: Date.now(),
+        dataSize: action.payload.blogs.length + action.payload.filters.length,
       });
 
       return {
@@ -104,6 +105,7 @@ export const blogsReducer = (
         action: TrackerActions.FilterBlogList,
         state: "started",
         time: Date.now(),
+        dataSize: blogs.length,
       });
 
       return {
