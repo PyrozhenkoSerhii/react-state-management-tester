@@ -9,7 +9,7 @@
     "client-dev-redux-v2": "webpack-dev-server --config webpack.config.dev.js --env.project=redux/v2",
     "client-dev-mobx-v1": "webpack-dev-server --config webpack.config.dev.js  --env.project=mobx/v1",
     "client-dev-context-v1": "webpack-dev-server --config webpack.config.dev.js --env.project=context/v1",
-    "client-dev-presentation": "webpack-dev-server --config webpack.config.dev.js --env.project=presentation",
+    "client-dev-presentation": "webpack-dev-server --config webpack.config.dev.js --env.project=presentation --env.port=81",
     "server-dev": "nodemon -r dotenv/config ./server/index.ts",
     "server-build": "tsc --project ./server/",
     "lint-client": "eslint src",
@@ -49,7 +49,7 @@
     "file-loader": "^6.1.0",
     "html-webpack-plugin": "^3.2.0",
     "less-loader": "^6.2.0",
-    "prettier": "^2.1.1",
+    "prettier": "^2.1.2",
     "source-map-loader": "^1.1.0",
     "style-loader": "^1.2.1",
     "ts-loader": "^8.0.3",
@@ -62,7 +62,7 @@
   },
   "dependencies": {
     "@ant-design/icons": "^4.2.2",
-    "antd": "^4.6.3",
+    "antd": "^4.6.4",
     "axios": "^0.19.2",
     "better-npm-run": "^0.1.1",
     "body-parser": "^1.19.0",
@@ -79,6 +79,7 @@
     "mobx-react": "^6.3.0",
     "mongoose": "^5.10.5",
     "nodemon": "^2.0.4",
+    "query-string": "^6.13.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-redux": "^7.2.1",
@@ -87,8 +88,6 @@
     "redux-devtools-extension": "^2.13.8",
     "redux-saga": "^1.1.3",
     "styled-components": "^5.2.0",
-    "swagger-jsdoc": "^4.0.0",
-    "swagger-ui-express": "^4.1.4",
     "winston": "^3.3.3"
   }
 }

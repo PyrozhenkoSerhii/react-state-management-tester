@@ -12,6 +12,7 @@ import {
   MobxOperationTime,
   ReduxOperationTime,
   ReduxSagaOperationTime,
+  GetTrackerQuery,
 } from "../../shared/interfaces";
 
 export const trackerRouter = Router();
@@ -84,6 +85,12 @@ trackerRouter.post(API.TRACKER_MOBX, (
 });
 
 trackerRouter.get(API.TRACKER, async (req: Request, res: Response) => {
-  const trackers = await TrackerModel.find({});
+  const query = req.query as GetTrackerQuery;
+
+  const trackers = await TrackerModel
+    .where("source").equals(Number(query.source))
+    .where("action").equals(Number(query.action))
+    .limit(Number(query.limit));
+
   return res.status(200).send(trackers);
 });

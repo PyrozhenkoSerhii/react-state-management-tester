@@ -7,12 +7,12 @@ import {
   ReduxSagaOperationTime,
 } from "../../shared/interfaces";
 
-type TrackerTime = MobxOperationTime | ReduxOperationTime | ReduxSagaOperationTime
+export type TrackerTime = MobxOperationTime | ReduxOperationTime | ReduxSagaOperationTime
 
 export interface ITracker<T> {
   source: TrackerSources;
   action: TrackerActions;
-  time: T;
+  time: TrackerTime;
   dataSize: number;
 }
 

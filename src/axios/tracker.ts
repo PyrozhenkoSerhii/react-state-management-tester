@@ -1,8 +1,14 @@
+import { stringify } from "query-string";
 import { instance } from "./api";
-import { MobxObservableActionOperation, ReduxOperation, ReduxSagaOperation } from "../../shared/interfaces";
+import {
+  MobxObservableActionOperation,
+  ReduxOperation,
+  ReduxSagaOperation,
+  GetTrackerQuery,
+} from "../../shared/interfaces";
 import { API } from "../../shared/api";
 
-import { Tracker } from "../../server/tracker/model";
+import { ITracker, TrackerTime } from "../../server/tracker/model";
 
 export const sendReduxOperationTrackerInfo = async (
   operation: ReduxOperation,
@@ -37,9 +43,11 @@ export const sendMobxObservableActionOperationTrackerInfo = async (
   }
 };
 
-export const getTrackers = async (): Promise<Array<Tracker>> => {
+export const getTrackers = async (query: GetTrackerQuery): Promise<Array<ITracker<TrackerTime>>> => {
+  const stringified = stringify(query);
+
   try {
-    const response = await instance.get<Array<Tracker>>(API.TRACKER);
+    const response = await instance.get<Array<ITracker<TrackerTime>>>(`${API.TRACKER}?${stringified}`);
     return response.data;
   } catch (err) {
     throw new Error(err);

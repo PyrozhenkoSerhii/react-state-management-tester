@@ -14,7 +14,10 @@ import {
   sendReduxSagaOperationTrackerInfo,
 } from "../axios/tracker";
 
-const searchOperationPartTimestamp = (x: OperationPartTimestamp, y: OperationPartTimestamp) => x.source === y.source && x.action === y.action && x.position === y.position && x.state === "started";
+const searchOperationPartTimestamp = (
+  x: OperationPartTimestamp,
+  y: OperationPartTimestamp,
+): boolean => x.source === y.source && x.action === y.action && x.position === y.position && x.state === "started";
 
 class TrackerServiceClass {
   operationPartTimestampList: Array<OperationPartTimestamp> = [];

@@ -11,7 +11,7 @@ module.exports = (env) => merge(baseConfig, {
     open: true,
     hot: true,
     host: "localhost",
-    port: 80,
+    port: env.port || 80,
   },
   devtool: 'source-map',
   plugins: [

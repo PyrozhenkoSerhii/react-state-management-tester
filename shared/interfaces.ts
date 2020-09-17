@@ -59,3 +59,9 @@ export interface ReduxOperation extends BaseOperation, ReduxOperationTime {}
 export interface MobxObservableActionOperation extends BaseOperation, MobxOperationTime {}
 
 export type TrackerDataList = Array<MobxObservableActionOperation|ReduxOperation|ReduxSagaOperation>
+
+export interface GetTrackerQuery {
+  source?: TrackerSources;
+  action?: TrackerActions;
+  limit?: number;
+}
