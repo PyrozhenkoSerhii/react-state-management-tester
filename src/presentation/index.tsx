@@ -8,8 +8,8 @@ import { ChartPage } from "./pages/chart";
 
 ReactDOM.render(
   <BrowserRouter>
-    <ChartPage />
-    <ChartPage />
+    <ChartPage id={1} />
+    <ChartPage id={2} />
   </BrowserRouter>,
   document.getElementById("app"),
 );

@@ -1,26 +1,47 @@
 import * as React from "react";
-import { Spin, Select, InputNumber, Checkbox } from "antd";
+import { Spin, Select, InputNumber } from "antd";
+import { useLocation, useHistory } from "react-router-dom";
+import { parse, stringify } from "query-string";
 import {
   Chart, Series, CommonSeriesSettings, Legend, ValueAxis, Title, Export, Tooltip,
 } from "devextreme-react/chart";
 
-import { PresentationTracker } from "./interafaces";
 import { TrackerActions, TrackerSources } from "../../../../shared/interfaces";
-
 import { getTrackers } from "../../../axios/tracker";
+
+import { PresentationTracker } from "./interafaces";
 import { PresentationWrapper, SelectGroup } from "./styled";
+import { prettifyKey } from "./utils";
 
 const DEFAULT_LIMIT = 20;
-const { useEffect, useState } = React;
+const { useEffect, useState, useMemo } = React;
 const { Option } = Select;
 
-export const ChartPage = (): JSX.Element => {
+interface PageProps {
+  id: number;
+}
+
+export const ChartPage = ({ id }: PageProps): JSX.Element => {
+  const { search } = useLocation();
+  const history = useHistory();
+
+  const searchParams = useMemo(() => parse(search), [search]);
+
   const [trackers, setTrackers] = useState<Array<PresentationTracker>>([]);
 
-  const [source, setSource] = useState<TrackerSources>(TrackerSources.REDUX_V1);
-  const [action, setAction] = useState<TrackerActions>(TrackerActions.CHECKBOX_FILTER);
-  const [limit, setLimit] = useState<number>(DEFAULT_LIMIT);
-  const [sortByDataAmount, setSortByDataAmount] = useState<boolean>(true);
+  const [source, setSource] = useState<TrackerSources>(null);
+  const [action, setAction] = useState<TrackerActions>(null);
+  const [limit, setLimit] = useState<number>(null);
+
+  useEffect(() => {
+    const sourceParam = searchParams[`source${id}`];
+    const actionParam = searchParams[`action${id}`];
+    const limitParam = searchParams[`limit${id}`];
+
+    setSource(sourceParam ? Number(sourceParam) : TrackerSources.REDUX_V1);
+    setAction(actionParam ? Number(actionParam) : TrackerActions.CHECKBOX_FILTER);
+    setLimit(limitParam ? Number(limitParam) : DEFAULT_LIMIT);
+  }, [search]);
 
   const fetchTrackers = async () => {
     try {
@@ -33,63 +54,64 @@ export const ChartPage = (): JSX.Element => {
   };
 
   useEffect(() => {
-    fetchTrackers();
+    if (source && action && limit) {
+      fetchTrackers();
+    }
   }, [source, action, limit]);
 
-  const [sortedTrackers, setSortedTrackers] = useState<Array<PresentationTracker>>([]);
+  const updateParam = (type: "action" | "source" | "limit") => (value: TrackerSources | TrackerActions | number) => {
+    console.log(type);
+    console.log(value);
+    switch (type) {
+      case "action":
+        setAction(Number(value));
+        searchParams[`action${id}`] = value.toString();
+        history.push({
+          search: stringify(searchParams),
+        });
+        break;
+      case "source":
+        setSource(Number(value));
+        searchParams[`source${id}`] = value.toString();
+        history.push({
+          search: stringify(searchParams),
+        });
+        break;
+      case "limit":
+        setLimit(Number(value));
+        searchParams[`limit${id}`] = value.toString();
+        history.push({
+          search: stringify(searchParams),
+        });
+        break;
+      default:
+        break;
+    }
+  };
 
-  useEffect(() => {
-    setSortedTrackers(sortByDataAmount
-      ? trackers.sort((
-        a: PresentationTracker, b: PresentationTracker,
-      ) => (a.affectedItems > b.affectedItems ? 1 : -1))
-      : trackers);
-  }, [trackers, sortByDataAmount]);
-
-  if (!sortedTrackers) {
+  if (!trackers) {
     return <Spin />;
   }
-
-  console.log(sortedTrackers);
 
   return (
     <PresentationWrapper>
       <SelectGroup>
-        <Select
-          id="source-select"
-          defaultValue={TrackerSources.REDUX_V1}
-          onChange={(value) => setSource(Number(value))}
-        >
+        <Select id="source-select" value={source} onChange={updateParam("source")}>
           {Object.entries(TrackerSources)
             .filter(([, value]) => typeof value === "number")
-            .map(([key, value]) => <Option key={value} value={value}>{key}</Option>)}
+            .map(([key, value]) => <Option key={value} value={value}>{prettifyKey(key)}</Option>)}
         </Select>
-        <Select
-          id="action-select"
-          defaultValue={TrackerActions.CHECKBOX_FILTER}
-          onChange={(value) => setAction(Number(value))}
-        >
+        <Select id="action-select" value={action} onChange={updateParam("action")}>
           {Object.entries(TrackerActions)
             .filter(([, value]) => typeof value === "number")
-            .map(([key, value]) => <Option key={value} value={value}>{key}</Option>)}
+            .map(([key, value]) => <Option key={value} value={value}>{prettifyKey(key)}</Option>)}
         </Select>
-        <InputNumber
-          min={DEFAULT_LIMIT}
-          max={50}
-          defaultValue={DEFAULT_LIMIT}
-          onChange={(value) => setLimit(Number(value))}
-        />
-        <Checkbox
-          checked={sortByDataAmount}
-          onChange={() => setSortByDataAmount(((prevValue) => !prevValue))}
-        >
-          Sort by data amount
-        </Checkbox>
+        <InputNumber min={DEFAULT_LIMIT} max={50} value={limit} onChange={updateParam("limit")} />
       </SelectGroup>
       <Chart
         id="chart"
         title="Update time to affected objects"
-        dataSource={sortedTrackers}
+        dataSource={trackers}
       >
         <CommonSeriesSettings argumentField="affectedItems" type="stackedBar" />
         <Series
