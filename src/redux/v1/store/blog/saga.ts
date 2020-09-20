@@ -1,4 +1,4 @@
-import { call, put, all, takeEvery } from "redux-saga/effects";
+import { call, put, all, take } from "redux-saga/effects";
 import { SagaIterator } from "redux-saga";
 
 import * as BlogTypes from "./types";
@@ -9,7 +9,7 @@ import { generateFilters } from "../../../../utils/filters";
 import { TrackerService } from "../../../../services/tracker";
 import { TrackerSources, TrackerActions, TrackerPositions } from "../../../../../shared/interfaces";
 
-function* fetchBlogsAsync(): SagaIterator {
+function* fetchBlogsAsync(action: BlogTypes.IFetchBlogsAction): SagaIterator {
   try {
     TrackerService.setTimeStamps({
       source: TrackerSources.REDUX_V1,
@@ -18,7 +18,7 @@ function* fetchBlogsAsync(): SagaIterator {
       state: "finished",
       time: Date.now(),
     });
-    const blogs: Array<IBlog> = yield call(fetchBlogList);
+    const blogs: Array<IBlog> = yield call(fetchBlogList, { limit: action.payload.limit });
 
     const filters = generateFilters(blogs);
 
@@ -42,7 +42,10 @@ function* fetchBlogsAsync(): SagaIterator {
 }
 
 function* fetchBlogsWatcher() {
-  yield takeEvery(BlogTypes.FETCH_BLOGS, fetchBlogsAsync);
+  while (true) {
+    const action: BlogTypes.IFetchBlogsAction = yield take(BlogTypes.FETCH_BLOGS);
+    yield call(fetchBlogsAsync, action);
+  }
 }
 
 export function* rootBlogSaga(): SagaIterator {

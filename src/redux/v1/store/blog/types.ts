@@ -11,6 +11,9 @@ export const UPDATE_FILTERS = "UPDATE_FILTERS";
  */
 export interface IFetchBlogsAction {
   type: typeof FETCH_BLOGS;
+  payload: {
+    limit: number;
+  }
 }
 
 export interface IFetchBlogsActionSuccess {

@@ -26,7 +26,7 @@ class BlogListState {
 
   @observable error: string | null = null;
 
-  @action fetchBlogList = async () => {
+  @action fetchBlogList = async (limit: number) => {
     TrackerService.setTimeStamps({
       source: TrackerSources.MOBX_V1,
       position: TrackerPositions.MOBX_ACTION_INIT,
@@ -36,7 +36,7 @@ class BlogListState {
     });
     this.loading = true;
     try {
-      const blogs = await fetchBlogList();
+      const blogs = await fetchBlogList({ limit });
       const filters = generateFilters(blogs);
 
       TrackerService.setTimeStamps({
@@ -45,6 +45,7 @@ class BlogListState {
         action: TrackerActions.FETCH_BLOG_LIST,
         state: "started",
         time: Date.now(),
+        affectedItems: blogs.length + filters.length,
       });
 
       runInAction(() => {
@@ -86,16 +87,20 @@ class BlogListState {
       return updated;
     });
 
+    const blogs = this.defaultBlogs.map(
+      (blog) => (isBlogPasses(blog, filters) ? blog : null),
+    ).filter(Boolean);
+
     TrackerService.setTimeStamps({
       source: TrackerSources.MOBX_V1,
       position: TrackerPositions.MOBX_ACTION_COMMIT,
       action: TrackerActions.CHECKBOX_FILTER,
       state: "started",
       time: Date.now(),
+      affectedItems: blogs.length,
     });
-    this.blogs = this.defaultBlogs.map(
-      (blog) => (isBlogPasses(blog, filters) ? blog : null),
-    ).filter(Boolean);
+
+    this.blogs = blogs;
     this.filters = filters;
   }
 

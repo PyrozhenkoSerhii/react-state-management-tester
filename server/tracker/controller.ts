@@ -159,10 +159,14 @@ trackerRouter.post(API.TRACKER_MOBX, async (
 trackerRouter.get(API.TRACKER, async (req: Request, res: Response) => {
   const query = req.query as GetTrackerQuery;
 
+  console.log("getter query", query);
+
   const trackers = await TrackerModel
     .where("source").equals(Number(query.source))
     .where("action").equals(Number(query.action))
     .limit(Number(query.limit));
+
+  console.log(trackers);
 
   return res.status(200).send(trackers);
 });

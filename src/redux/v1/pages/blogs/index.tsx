@@ -1,5 +1,7 @@
 import * as React from "react";
 import { Spin, Alert } from "antd";
+import { parse } from "query-string";
+import { useLocation } from "react-router-dom";
 
 import { useSelector, useDispatch } from "react-redux";
 import { fetchBlogsAsync, updateFilters } from "../../store/blog/actions";
@@ -12,10 +14,14 @@ import { TrackerActions, TrackerSources, TrackerPositions } from "../../../../..
 
 import { BlogListBodyWrapper, BlogListContent, BlogListHeaderWrapper, BlogListSidebar, BlogListWrapper } from "./styled";
 
-const { useEffect, useState } = React;
+const { useEffect, useState, useMemo } = React;
 
 export const BlogListPage = (): JSX.Element => {
   const dispatch = useDispatch();
+
+  const { search } = useLocation();
+
+  const { limit } = useMemo(() => parse(search), [search]);
 
   const { blogs, error, loading, filters } = useSelector((state: IApplicationState) => state.blogs);
 
@@ -28,7 +34,7 @@ export const BlogListPage = (): JSX.Element => {
       state: "started",
       time: Date.now(),
     });
-    dispatch(fetchBlogsAsync());
+    dispatch(fetchBlogsAsync(limit ? Number(limit) : 200));
     setFromRedux(TrackerActions.FETCH_BLOG_LIST);
   }, []);
 

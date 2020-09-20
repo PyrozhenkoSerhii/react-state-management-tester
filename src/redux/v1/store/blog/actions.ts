@@ -1,7 +1,8 @@
 import { IFetchBlogsAction, FETCH_BLOGS, IUpdateFilters, UPDATE_FILTERS } from "./types";
 
-export const fetchBlogsAsync = (): IFetchBlogsAction => ({
+export const fetchBlogsAsync = (limit: number): IFetchBlogsAction => ({
   type: FETCH_BLOGS,
+  payload: { limit },
 });
 
 export const updateFilters = (

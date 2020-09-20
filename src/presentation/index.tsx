@@ -9,6 +9,7 @@ import { ChartPage } from "./pages/chart";
 ReactDOM.render(
   <BrowserRouter>
     <ChartPage />
+    <ChartPage />
   </BrowserRouter>,
   document.getElementById("app"),
 );

@@ -46,7 +46,7 @@ export const blogsReducer = (
         action: TrackerActions.FETCH_BLOG_LIST,
         state: "started",
         time: Date.now(),
-        affectedItems: action.payload.blogs.length + action.payload.filters.length,
+        affectedItems: action.payload.blogs.length,
       });
 
       return {

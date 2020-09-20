@@ -5,8 +5,13 @@ import { API } from "../../shared/api";
 
 export const blogsRouter = Router();
 
+export interface GetBlogsQuery {
+  limit?: number;
+}
+
 blogsRouter.get(API.BLOGS, async (req: Request, res: Response) => {
-  const blogs = await BlogModel.find(req.query);
+  const query = req.query as GetBlogsQuery;
+  const blogs = await BlogModel.find().limit(Number(query.limit));
   res.status(200).send(blogs);
 });
 

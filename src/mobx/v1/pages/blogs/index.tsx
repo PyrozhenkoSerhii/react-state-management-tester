@@ -1,4 +1,6 @@
 import * as React from "react";
+import { useLocation } from "react-router-dom";
+import { parse } from "query-string";
 import { observer } from "mobx-react";
 import { Spin, Alert } from "antd";
 
@@ -11,9 +13,13 @@ import { BlogListBodyWrapper, BlogListContent, BlogListHeaderWrapper, BlogListSi
 import { TrackerService } from "../../../../services/tracker";
 import { TrackerActions, TrackerSources, TrackerPositions } from "../../../../../shared/interfaces";
 
-const { useContext, useEffect, useState } = React;
+const { useContext, useEffect, useState, useMemo } = React;
 
 export const BlogListPage = observer((): JSX.Element => {
+  const { search } = useLocation();
+
+  const { limit } = useMemo(() => parse(search), [search]);
+
   const {
     fetchBlogList, loading, error, filters, blogs, updateFilters,
   } = useContext(blogListState);
@@ -28,7 +34,7 @@ export const BlogListPage = observer((): JSX.Element => {
       state: "started",
       time: Date.now(),
     });
-    fetchBlogList();
+    fetchBlogList(limit ? Number(limit) : 200);
     setFromMobx(TrackerActions.FETCH_BLOG_LIST);
   }, []);
 
