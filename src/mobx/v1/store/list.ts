@@ -28,9 +28,9 @@ class BlogListState {
 
   @action fetchBlogList = async () => {
     TrackerService.setTimeStamps({
-      source: TrackerSources.MobxV1,
-      position: TrackerPositions.MobxActionInit,
-      action: TrackerActions.FetchBlogList,
+      source: TrackerSources.MOBX_V1,
+      position: TrackerPositions.MOBX_ACTION_INIT,
+      action: TrackerActions.FETCH_BLOG_LIST,
       state: "finished",
       time: Date.now(),
     });
@@ -40,9 +40,9 @@ class BlogListState {
       const filters = generateFilters(blogs);
 
       TrackerService.setTimeStamps({
-        source: TrackerSources.MobxV1,
-        position: TrackerPositions.MobxActionCommit,
-        action: TrackerActions.FetchBlogList,
+        source: TrackerSources.MOBX_V1,
+        position: TrackerPositions.MOBX_ACTION_COMMIT,
+        action: TrackerActions.FETCH_BLOG_LIST,
         state: "started",
         time: Date.now(),
       });
@@ -63,9 +63,9 @@ class BlogListState {
 
   @action updateFilters = (title: string, value: boolean | number, secondValue: number) => {
     TrackerService.setTimeStamps({
-      source: TrackerSources.MobxV1,
-      position: TrackerPositions.MobxActionInit,
-      action: TrackerActions.FilterBlogList,
+      source: TrackerSources.MOBX_V1,
+      position: TrackerPositions.MOBX_ACTION_INIT,
+      action: TrackerActions.CHECKBOX_FILTER,
       state: "finished",
       time: Date.now(),
     });
@@ -87,9 +87,9 @@ class BlogListState {
     });
 
     TrackerService.setTimeStamps({
-      source: TrackerSources.MobxV1,
-      position: TrackerPositions.MobxActionCommit,
-      action: TrackerActions.FilterBlogList,
+      source: TrackerSources.MOBX_V1,
+      position: TrackerPositions.MOBX_ACTION_COMMIT,
+      action: TrackerActions.CHECKBOX_FILTER,
       state: "started",
       time: Date.now(),
     });

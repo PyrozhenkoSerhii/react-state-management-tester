@@ -43,7 +43,9 @@ export const sendMobxObservableActionOperationTrackerInfo = async (
   }
 };
 
-export const getTrackers = async (query: GetTrackerQuery): Promise<Array<ITracker<TrackerTime>>> => {
+export const getTrackers = async (
+  query: GetTrackerQuery,
+): Promise<Array<ITracker<TrackerTime>>> => {
   const stringified = stringify(query);
 
   try {

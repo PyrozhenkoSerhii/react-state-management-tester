@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { ITracker } from "../../../../server/tracker/model";
 import { ReduxOperationTime, MobxOperationTime, ReduxSagaOperationTime } from "../../../../shared/interfaces";
 

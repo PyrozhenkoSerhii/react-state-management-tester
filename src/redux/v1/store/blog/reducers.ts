@@ -33,20 +33,20 @@ export const blogsReducer = (
       };
     case FETCH_BLOGS_SUCCESS:
       TrackerService.setTimeStamps({
-        source: TrackerSources.ReduxV1,
-        position: TrackerPositions.ReduxReduce,
-        action: TrackerActions.FetchBlogList,
+        source: TrackerSources.REDUX_V1,
+        position: TrackerPositions.REDUX_REDUCE,
+        action: TrackerActions.FETCH_BLOG_LIST,
         state: "finished",
         time: Date.now(),
       });
 
       TrackerService.setTimeStamps({
-        source: TrackerSources.ReduxV1,
-        position: TrackerPositions.ReduxCommit,
-        action: TrackerActions.FetchBlogList,
+        source: TrackerSources.REDUX_V1,
+        position: TrackerPositions.REDUX_COMMIT,
+        action: TrackerActions.FETCH_BLOG_LIST,
         state: "started",
         time: Date.now(),
-        dataSize: action.payload.blogs.length + action.payload.filters.length,
+        affectedItems: action.payload.blogs.length + action.payload.filters.length,
       });
 
       return {
@@ -70,9 +70,9 @@ export const blogsReducer = (
       };
     case UPDATE_FILTERS: {
       TrackerService.setTimeStamps({
-        source: TrackerSources.ReduxV1,
-        position: TrackerPositions.ReduxReduce,
-        action: TrackerActions.FilterBlogList,
+        source: TrackerSources.REDUX_V1,
+        position: TrackerPositions.REDUX_REDUCE,
+        action: TrackerActions.CHECKBOX_FILTER,
         state: "finished",
         time: Date.now(),
       });
@@ -100,12 +100,12 @@ export const blogsReducer = (
       ).filter(Boolean);
 
       TrackerService.setTimeStamps({
-        source: TrackerSources.ReduxV1,
-        position: TrackerPositions.ReduxCommit,
-        action: TrackerActions.FilterBlogList,
+        source: TrackerSources.REDUX_V1,
+        position: TrackerPositions.REDUX_COMMIT,
+        action: TrackerActions.CHECKBOX_FILTER,
         state: "started",
         time: Date.now(),
-        dataSize: blogs.length,
+        affectedItems: blogs.length,
       });
 
       return {

@@ -17,8 +17,8 @@ const { Option } = Select;
 export const ChartPage = (): JSX.Element => {
   const [trackers, setTrackers] = useState<Array<PresentationTracker>>([]);
 
-  const [source, setSource] = useState<TrackerSources>(TrackerSources.ReduxV1);
-  const [action, setAction] = useState<TrackerActions>(TrackerActions.FetchBlogList);
+  const [source, setSource] = useState<TrackerSources>(TrackerSources.REDUX_V1);
+  const [action, setAction] = useState<TrackerActions>(TrackerActions.FETCH_BLOG_LIST);
   const [limit, setLimit] = useState<number>(DEFAULT_LIMIT);
   const [sortByDataAmount, setSortByDataAmount] = useState<boolean>(false);
 
@@ -40,7 +40,9 @@ export const ChartPage = (): JSX.Element => {
 
   useEffect(() => {
     setSortedTrackers(sortByDataAmount
-      ? trackers.sort((a: PresentationTracker, b: PresentationTracker) => (a.dataSize > b.dataSize ? 1 : -1))
+      ? trackers.sort((
+        a: PresentationTracker, b: PresentationTracker,
+      ) => (a.affectedItems > b.affectedItems ? 1 : -1))
       : trackers);
   }, [trackers, sortByDataAmount]);
 
@@ -55,7 +57,7 @@ export const ChartPage = (): JSX.Element => {
       <SelectGroup>
         <Select
           id="source-select"
-          defaultValue={TrackerSources.ReduxV1}
+          defaultValue={TrackerSources.REDUX_V1}
           onChange={(value) => setSource(Number(value))}
         >
           {Object.entries(TrackerSources)
@@ -64,7 +66,7 @@ export const ChartPage = (): JSX.Element => {
         </Select>
         <Select
           id="action-select"
-          defaultValue={TrackerActions.FetchBlogList}
+          defaultValue={TrackerActions.FETCH_BLOG_LIST}
           onChange={(value) => setAction(Number(value))}
         >
           {Object.entries(TrackerActions)

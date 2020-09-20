@@ -12,9 +12,9 @@ import { TrackerSources, TrackerActions, TrackerPositions } from "../../../../..
 function* fetchBlogsAsync(): SagaIterator {
   try {
     TrackerService.setTimeStamps({
-      source: TrackerSources.ReduxV1,
-      position: TrackerPositions.ReduxSaga,
-      action: TrackerActions.FetchBlogList,
+      source: TrackerSources.REDUX_V1,
+      position: TrackerPositions.REDUX_SAGA,
+      action: TrackerActions.FETCH_BLOG_LIST,
       state: "finished",
       time: Date.now(),
     });
@@ -23,9 +23,9 @@ function* fetchBlogsAsync(): SagaIterator {
     const filters = generateFilters(blogs);
 
     TrackerService.setTimeStamps({
-      source: TrackerSources.ReduxV1,
-      position: TrackerPositions.ReduxReduce,
-      action: TrackerActions.FetchBlogList,
+      source: TrackerSources.REDUX_V1,
+      position: TrackerPositions.REDUX_REDUCE,
+      action: TrackerActions.FETCH_BLOG_LIST,
       state: "started",
       time: Date.now(),
     });

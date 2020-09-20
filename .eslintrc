@@ -50,7 +50,6 @@
       "error",
       "double"
     ],
-    "@typescript-eslint/no-explicit-any": "off",
-    "max-len": ["error", {"code": 120, "ignoreTemplateLiterals": true}]
+    "@typescript-eslint/no-explicit-any": "off"
   }
 }

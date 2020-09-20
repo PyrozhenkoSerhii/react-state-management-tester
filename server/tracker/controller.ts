@@ -18,9 +18,9 @@ import {
 export const trackerRouter = Router();
 
 trackerRouter.post(API.TRACKER_REDUX, (req: TypedRequest<ReduxOperation>, res: Response) => {
-  const { source, action, reduceTime, commitTime, dataSize } = req.body;
+  const { source, action, reduceTime, commitTime, affectedItems } = req.body;
 
-  console.log(`[${TrackerSources[source]}][${TrackerActions[action]}] [redux variation] ${reduceTime}ms + ${commitTime}ms. ${dataSize} objects updated`);
+  console.log(`[${TrackerSources[source]}][${TrackerActions[action]}] [redux variation] ${reduceTime}ms + ${commitTime}ms. ${affectedItems} objects updated`);
 
   const tracker: ITracker<ReduxOperationTime> = {
     source,
@@ -29,7 +29,7 @@ trackerRouter.post(API.TRACKER_REDUX, (req: TypedRequest<ReduxOperation>, res: R
       reduceTime,
       commitTime,
     },
-    dataSize,
+    affectedItems,
   };
 
   new TrackerModel(tracker).save();
@@ -41,9 +41,9 @@ trackerRouter.post(API.TRACKER_REDUX_SAGA, (
   req: TypedRequest<ReduxSagaOperation>,
   res: Response,
 ) => {
-  const { source, action, sagaTime, reduceTime, commitTime, dataSize } = req.body;
+  const { source, action, sagaTime, reduceTime, commitTime, affectedItems } = req.body;
 
-  console.log(`[${TrackerSources[source]}][${TrackerActions[action]}] [redux-saga variation]:  ${sagaTime}ms + ${reduceTime}ms + ${commitTime}ms. ${dataSize} objects updated`);
+  console.log(`[${TrackerSources[source]}][${TrackerActions[action]}] [redux-saga variation]:  ${sagaTime}ms + ${reduceTime}ms + ${commitTime}ms. ${affectedItems} objects updated`);
 
   const tracker: ITracker<ReduxSagaOperationTime> = {
     source,
@@ -53,7 +53,7 @@ trackerRouter.post(API.TRACKER_REDUX_SAGA, (
       reduceTime,
       commitTime,
     },
-    dataSize,
+    affectedItems,
   };
 
   new TrackerModel(tracker).save();
@@ -65,7 +65,7 @@ trackerRouter.post(API.TRACKER_MOBX, (
   req: TypedRequest<MobxObservableActionOperation>,
   res: Response,
 ) => {
-  const { source, action, initTime, commitTime, dataSize } = req.body;
+  const { source, action, initTime, commitTime, affectedItems } = req.body;
 
   const tracker: ITracker<MobxOperationTime> = {
     source,
@@ -74,12 +74,12 @@ trackerRouter.post(API.TRACKER_MOBX, (
       initTime,
       commitTime,
     },
-    dataSize,
+    affectedItems,
   };
 
   new TrackerModel(tracker).save();
 
-  console.log(`[${TrackerSources[source]}][${TrackerActions[action]}] [mobx action+observable variation]:  ${initTime}ms + ${commitTime}ms. ${dataSize} objects updated`);
+  console.log(`[${TrackerSources[source]}][${TrackerActions[action]}] [mobx action+observable variation]:  ${initTime}ms + ${commitTime}ms. ${affectedItems} objects updated`);
 
   res.sendStatus(201);
 });

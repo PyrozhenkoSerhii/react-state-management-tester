@@ -47,7 +47,7 @@ class TrackerServiceClass {
       position: started.position,
       action: started.action,
       time: operationPartTimestamp.time - started.time,
-      dataSize: operationPartTimestamp.dataSize || started.dataSize,
+      affectedItems: operationPartTimestamp.affectedItems || started.affectedItems,
     });
 
     this.operationPartTimestampList.splice(index, 1);
@@ -59,46 +59,46 @@ class TrackerServiceClass {
   private setOperationPart = (operationPart: OperationPart) => {
     console.log(operationPart);
     switch (operationPart.source) {
-      case TrackerSources.MobxV1:
-        if (!this.mobxOperation && operationPart.position === TrackerPositions.MobxActionInit) {
+      case TrackerSources.MOBX_V1:
+        if (!this.mobxOperation && operationPart.position === TrackerPositions.MOBX_ACTION_INIT) {
           this.mobxOperation = {
             source: operationPart.source,
             action: operationPart.action,
             initTime: operationPart.time,
             commitTime: null,
-            dataSize: operationPart.dataSize || null,
+            affectedItems: operationPart.affectedItems || null,
           };
-        } else if (operationPart.position === TrackerPositions.MobxActionCommit) {
+        } else if (operationPart.position === TrackerPositions.MOBX_ACTION_COMMIT) {
           const operation = this.mobxOperation;
           operation.commitTime = operationPart.time;
-          operation.dataSize = operationPart.dataSize;
+          operation.affectedItems = operationPart.affectedItems;
           sendMobxObservableActionOperationTrackerInfo(operation);
           this.mobxOperation = null;
         }
         break;
       default:
-      case TrackerSources.ReduxV1:
-        if (!this.reduxSagaOperation && operationPart.position === TrackerPositions.ReduxSaga) {
+      case TrackerSources.REDUX_V1:
+        if (!this.reduxSagaOperation && operationPart.position === TrackerPositions.REDUX_SAGA) {
           this.reduxSagaOperation = {
             source: operationPart.source,
             action: operationPart.action,
             sagaTime: operationPart.time,
             reduceTime: null,
             commitTime: null,
-            dataSize: operationPart.dataSize || null,
+            affectedItems: operationPart.affectedItems || null,
           };
           return;
         }
         if (this.reduxSagaOperation) {
           switch (operationPart.position) {
-            case TrackerPositions.ReduxReduce:
+            case TrackerPositions.REDUX_REDUCE:
               this.reduxSagaOperation.reduceTime = operationPart.time;
               break;
-            case TrackerPositions.ReduxCommit:
+            case TrackerPositions.REDUX_COMMIT:
               sendReduxSagaOperationTrackerInfo({
                 ...this.reduxSagaOperation,
                 commitTime: operationPart.time,
-                dataSize: operationPart.dataSize,
+                affectedItems: operationPart.affectedItems,
 
               });
               this.reduxSagaOperation = null;
@@ -108,19 +108,19 @@ class TrackerServiceClass {
           }
           return;
         }
-        if (!this.reduxOperation && operationPart.position === TrackerPositions.ReduxReduce) {
+        if (!this.reduxOperation && operationPart.position === TrackerPositions.REDUX_REDUCE) {
           this.reduxOperation = {
             source: operationPart.source,
             action: operationPart.action,
             reduceTime: operationPart.time,
             commitTime: null,
-            dataSize: operationPart.dataSize || null,
+            affectedItems: operationPart.affectedItems || null,
           };
           return;
         }
-        if (this.reduxOperation && operationPart.position === TrackerPositions.ReduxCommit) {
+        if (this.reduxOperation && operationPart.position === TrackerPositions.REDUX_COMMIT) {
           this.reduxOperation.commitTime = operationPart.time;
-          this.reduxOperation.dataSize = operationPart.dataSize;
+          this.reduxOperation.affectedItems = operationPart.affectedItems;
           sendReduxOperationTrackerInfo(this.reduxOperation);
           this.reduxOperation = null;
         }

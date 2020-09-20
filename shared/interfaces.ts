@@ -1,21 +1,21 @@
 export enum TrackerPositions {
-  ReduxReduce = 1,
-  ReduxSaga = 2,
-  ReduxCommit = 3,
-  MobxActionInit = 4,
-  MobxActionCommit = 5,
+  REDUX_REDUCE = 1,
+  REDUX_SAGA = 2,
+  REDUX_COMMIT = 3,
+  MOBX_ACTION_INIT = 4,
+  MOBX_ACTION_COMMIT = 5,
 }
 
 export enum TrackerSources {
-  ReduxV1 = 1,
-  ReduxV2 = 2,
-  MobxV1 = 3,
-  ContextV1 = 4
+  REDUX_V1 = 1,
+  REDUX_V2 = 2,
+  MOBX_V1 = 3,
+  CONTEXT_V1 = 4
 }
 
 export enum TrackerActions {
-  FetchBlogList = 1,
-  FilterBlogList = 2,
+  FETCH_BLOG_LIST = 1,
+  CHECKBOX_FILTER = 2,
 }
 
 export interface OperationPart {
@@ -23,7 +23,7 @@ export interface OperationPart {
   action: TrackerActions;
   position: TrackerPositions;
   time: number;
-  dataSize?: number;
+  affectedItems?: number;
 }
 
 export type OperationPartTimestamp = OperationPart & {
@@ -33,7 +33,7 @@ export type OperationPartTimestamp = OperationPart & {
 interface BaseOperation {
   source: TrackerSources;
   action: TrackerActions;
-  dataSize: number;
+  affectedItems: number;
 }
 
 export interface ReduxSagaOperationTime {

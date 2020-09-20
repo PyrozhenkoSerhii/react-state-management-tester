@@ -22,31 +22,31 @@ export const BlogListPage = observer((): JSX.Element => {
 
   useEffect(() => {
     TrackerService.setTimeStamps({
-      source: TrackerSources.MobxV1,
-      position: TrackerPositions.MobxActionInit,
-      action: TrackerActions.FetchBlogList,
+      source: TrackerSources.MOBX_V1,
+      position: TrackerPositions.MOBX_ACTION_INIT,
+      action: TrackerActions.FETCH_BLOG_LIST,
       state: "started",
       time: Date.now(),
     });
     fetchBlogList();
-    setFromMobx(TrackerActions.FetchBlogList);
+    setFromMobx(TrackerActions.FETCH_BLOG_LIST);
   }, []);
 
   useEffect(() => {
-    if (fromMobx === TrackerActions.FetchBlogList) {
+    if (fromMobx === TrackerActions.FETCH_BLOG_LIST) {
       TrackerService.setTimeStamps({
-        source: TrackerSources.MobxV1,
-        position: TrackerPositions.MobxActionCommit,
-        action: TrackerActions.FetchBlogList,
+        source: TrackerSources.MOBX_V1,
+        position: TrackerPositions.MOBX_ACTION_COMMIT,
+        action: TrackerActions.FETCH_BLOG_LIST,
         state: "finished",
         time: Date.now(),
       });
       setFromMobx(null);
-    } else if (fromMobx === TrackerActions.FilterBlogList) {
+    } else if (fromMobx === TrackerActions.CHECKBOX_FILTER) {
       TrackerService.setTimeStamps({
-        source: TrackerSources.MobxV1,
-        position: TrackerPositions.MobxActionCommit,
-        action: TrackerActions.FilterBlogList,
+        source: TrackerSources.MOBX_V1,
+        position: TrackerPositions.MOBX_ACTION_COMMIT,
+        action: TrackerActions.CHECKBOX_FILTER,
         state: "finished",
         time: Date.now(),
       });
@@ -64,14 +64,14 @@ export const BlogListPage = observer((): JSX.Element => {
 
   const updateBlogs = (title: string, value: boolean | number, secondValue: number) => {
     TrackerService.setTimeStamps({
-      source: TrackerSources.MobxV1,
-      position: TrackerPositions.MobxActionInit,
-      action: TrackerActions.FilterBlogList,
+      source: TrackerSources.MOBX_V1,
+      position: TrackerPositions.MOBX_ACTION_INIT,
+      action: TrackerActions.CHECKBOX_FILTER,
       state: "started",
       time: Date.now(),
     });
     updateFilters(title, value, secondValue);
-    setFromMobx(TrackerActions.FilterBlogList);
+    setFromMobx(TrackerActions.CHECKBOX_FILTER);
   };
 
   return (

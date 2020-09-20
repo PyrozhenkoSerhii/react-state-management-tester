@@ -13,7 +13,7 @@ export interface ITracker<T> {
   source: TrackerSources;
   action: TrackerActions;
   time: TrackerTime;
-  dataSize: number;
+  affectedItems: number;
 }
 
 export type Tracker = ITracker<TrackerTime> & Document
@@ -31,7 +31,7 @@ const TrackerSchema = new Schema({
   },
   // TODO: use actual type
   time: Object,
-  dataSize: {
+  affectedItems: {
     type: Number,
     required: true,
   },

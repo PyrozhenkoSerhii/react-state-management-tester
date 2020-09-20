@@ -22,32 +22,32 @@ export const BlogListPage = (): JSX.Element => {
   const [fromRedux, setFromRedux] = useState(null);
   useEffect(() => {
     TrackerService.setTimeStamps({
-      source: TrackerSources.ReduxV1,
-      position: TrackerPositions.ReduxSaga,
-      action: TrackerActions.FetchBlogList,
+      source: TrackerSources.REDUX_V1,
+      position: TrackerPositions.REDUX_SAGA,
+      action: TrackerActions.FETCH_BLOG_LIST,
       state: "started",
       time: Date.now(),
     });
     dispatch(fetchBlogsAsync());
-    setFromRedux(TrackerActions.FetchBlogList);
+    setFromRedux(TrackerActions.FETCH_BLOG_LIST);
   }, []);
 
   useEffect(() => {
-    if (fromRedux === TrackerActions.FilterBlogList) {
+    if (fromRedux === TrackerActions.CHECKBOX_FILTER) {
       TrackerService.setTimeStamps({
-        source: TrackerSources.ReduxV1,
-        position: TrackerPositions.ReduxCommit,
-        action: TrackerActions.FilterBlogList,
+        source: TrackerSources.REDUX_V1,
+        position: TrackerPositions.REDUX_COMMIT,
+        action: TrackerActions.CHECKBOX_FILTER,
         state: "finished",
         time: Date.now(),
       });
       setFromRedux(null);
     }
-    if (fromRedux === TrackerActions.FetchBlogList) {
+    if (fromRedux === TrackerActions.FETCH_BLOG_LIST) {
       TrackerService.setTimeStamps({
-        source: TrackerSources.ReduxV1,
-        position: TrackerPositions.ReduxCommit,
-        action: TrackerActions.FetchBlogList,
+        source: TrackerSources.REDUX_V1,
+        position: TrackerPositions.REDUX_COMMIT,
+        action: TrackerActions.FETCH_BLOG_LIST,
         state: "finished",
         time: Date.now(),
       });
@@ -57,14 +57,14 @@ export const BlogListPage = (): JSX.Element => {
 
   const onFilerChange = (title: string, value: boolean | number, secondValue: number): void => {
     TrackerService.setTimeStamps({
-      source: TrackerSources.ReduxV1,
-      position: TrackerPositions.ReduxReduce,
-      action: TrackerActions.FilterBlogList,
+      source: TrackerSources.REDUX_V1,
+      position: TrackerPositions.REDUX_REDUCE,
+      action: TrackerActions.CHECKBOX_FILTER,
       state: "started",
       time: Date.now(),
     });
     dispatch(updateFilters(title, value, secondValue));
-    setFromRedux(TrackerActions.FilterBlogList);
+    setFromRedux(TrackerActions.CHECKBOX_FILTER);
   };
 
   if (loading) return <Spin />;
