@@ -17,71 +17,143 @@ import {
 
 export const trackerRouter = Router();
 
-trackerRouter.post(API.TRACKER_REDUX, (req: TypedRequest<ReduxOperation>, res: Response) => {
+trackerRouter.post(API.TRACKER_REDUX, async (req: TypedRequest<ReduxOperation>, res: Response) => {
   const { source, action, reduceTime, commitTime, affectedItems } = req.body;
 
-  console.log(`[${TrackerSources[source]}][${TrackerActions[action]}] [redux variation] ${reduceTime}ms + ${commitTime}ms. ${affectedItems} objects updated`);
+  const time: ReduxOperationTime = { reduceTime, commitTime };
+
+  console.log(`[${TrackerSources[source]}][${TrackerActions[action]}] [redux variation] ${reduceTime}ms + ${commitTime}ms. ${affectedItems} objects affected`);
+
+  const existing = await TrackerModel.findOne({ source, action, affectedItems });
+  if (existing) {
+    existing.sampleCount += 1;
+    const timeList = [...existing.timeList, time];
+    existing.timeList = timeList;
+
+    const timeSum: ReduxOperationTime = timeList
+      .reduce<ReduxOperationTime>((acc: ReduxOperationTime, item: ReduxOperationTime) => ({
+        reduceTime: acc.reduceTime + item.reduceTime,
+        commitTime: acc.commitTime + item.commitTime,
+      }), { reduceTime: 0, commitTime: 0 });
+
+    existing.averageTime = {
+      reduceTime: Number((timeSum.reduceTime / timeList.length).toFixed(2)),
+      commitTime: Number((timeSum.commitTime / timeList.length).toFixed(2)),
+    };
+
+    existing.save();
+
+    return res.status(201);
+  }
 
   const tracker: ITracker<ReduxOperationTime> = {
     source,
     action,
-    time: {
-      reduceTime,
-      commitTime,
-    },
+    timeList: [time],
+    averageTime: time,
     affectedItems,
+    sampleCount: 1,
   };
 
   new TrackerModel(tracker).save();
 
-  res.sendStatus(201);
+  return res.sendStatus(201);
 });
 
-trackerRouter.post(API.TRACKER_REDUX_SAGA, (
+trackerRouter.post(API.TRACKER_REDUX_SAGA, async (
   req: TypedRequest<ReduxSagaOperation>,
   res: Response,
 ) => {
   const { source, action, sagaTime, reduceTime, commitTime, affectedItems } = req.body;
 
-  console.log(`[${TrackerSources[source]}][${TrackerActions[action]}] [redux-saga variation]:  ${sagaTime}ms + ${reduceTime}ms + ${commitTime}ms. ${affectedItems} objects updated`);
+  console.log(`[${TrackerSources[source]}][${TrackerActions[action]}] [redux-saga variation]:  ${sagaTime}ms + ${reduceTime}ms + ${commitTime}ms. ${affectedItems} objects affected`);
+
+  const time: ReduxSagaOperationTime = { sagaTime, reduceTime, commitTime };
+
+  const existing = await TrackerModel.findOne({ source, action, affectedItems });
+  if (existing) {
+    existing.sampleCount += 1;
+    const timeList = [...existing.timeList, time];
+    existing.timeList = timeList;
+
+    const timeSum: ReduxSagaOperationTime = timeList.reduce<ReduxSagaOperationTime>(
+      (acc: ReduxSagaOperationTime, item: ReduxSagaOperationTime) => ({
+        sagaTime: acc.sagaTime + item.sagaTime,
+        reduceTime: acc.reduceTime + item.reduceTime,
+        commitTime: acc.commitTime + item.commitTime,
+      }), { sagaTime: 0, reduceTime: 0, commitTime: 0 },
+    );
+
+    existing.averageTime = {
+      sagaTime: Number((timeSum.sagaTime / timeList.length).toFixed(2)),
+      reduceTime: Number((timeSum.reduceTime / timeList.length).toFixed(2)),
+      commitTime: Number((timeSum.commitTime / timeList.length).toFixed(2)),
+    };
+
+    existing.save();
+
+    return res.status(201);
+  }
 
   const tracker: ITracker<ReduxSagaOperationTime> = {
     source,
     action,
-    time: {
-      sagaTime,
-      reduceTime,
-      commitTime,
-    },
+    timeList: [time],
+    averageTime: time,
     affectedItems,
+    sampleCount: 1,
   };
 
   new TrackerModel(tracker).save();
 
-  res.sendStatus(201);
+  return res.sendStatus(201);
 });
 
-trackerRouter.post(API.TRACKER_MOBX, (
+trackerRouter.post(API.TRACKER_MOBX, async (
   req: TypedRequest<MobxObservableActionOperation>,
   res: Response,
 ) => {
   const { source, action, initTime, commitTime, affectedItems } = req.body;
 
+  const time: MobxOperationTime = { initTime, commitTime };
+
+  console.log(`[${TrackerSources[source]}][${TrackerActions[action]}] [mobx action+observable variation]:  ${initTime}ms + ${commitTime}ms. ${affectedItems} objects affected`);
+
+  const existing = await TrackerModel.findOne({ source, action, affectedItems });
+  if (existing) {
+    existing.sampleCount += 1;
+    const timeList = [...existing.timeList, time];
+    existing.timeList = timeList;
+
+    const timeSum: MobxOperationTime = timeList.reduce<MobxOperationTime>(
+      (acc: MobxOperationTime, item: MobxOperationTime) => ({
+        initTime: acc.initTime + item.initTime,
+        commitTime: acc.commitTime + item.commitTime,
+      }), { initTime: 0, commitTime: 0 },
+    );
+
+    existing.averageTime = {
+      initTime: Number((timeSum.initTime / timeList.length).toFixed(2)),
+      commitTime: Number((timeSum.commitTime / timeList.length).toFixed(2)),
+    };
+
+    existing.save();
+
+    return res.status(201);
+  }
+
   const tracker: ITracker<MobxOperationTime> = {
     source,
     action,
-    time: {
-      initTime,
-      commitTime,
-    },
+    timeList: [time],
+    averageTime: time,
     affectedItems,
+    sampleCount: 1,
   };
 
   new TrackerModel(tracker).save();
 
-  console.log(`[${TrackerSources[source]}][${TrackerActions[action]}] [mobx action+observable variation]:  ${initTime}ms + ${commitTime}ms. ${affectedItems} objects updated`);
-
-  res.sendStatus(201);
+  return res.sendStatus(201);
 });
 
 trackerRouter.get(API.TRACKER, async (req: Request, res: Response) => {

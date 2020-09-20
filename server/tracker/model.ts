@@ -12,8 +12,10 @@ export type TrackerTime = MobxOperationTime | ReduxOperationTime | ReduxSagaOper
 export interface ITracker<T> {
   source: TrackerSources;
   action: TrackerActions;
-  time: TrackerTime;
+  timeList: Array<TrackerTime>;
+  averageTime: TrackerTime;
   affectedItems: number;
+  sampleCount: number;
 }
 
 export type Tracker = ITracker<TrackerTime> & Document
@@ -29,9 +31,14 @@ const TrackerSchema = new Schema({
     enum: Object.values(TrackerSources).filter((v) => typeof v === "number"),
     required: true,
   },
-  // TODO: use actual type
-  time: Object,
+  // TODO: use actual types for averageTime and timeList
+  averageTime: Object,
+  timeList: Object,
   affectedItems: {
+    type: Number,
+    required: true,
+  },
+  sampleCount: {
     type: Number,
     required: true,
   },

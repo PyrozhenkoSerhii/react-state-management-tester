@@ -10,7 +10,7 @@ import { TrackerActions, TrackerSources } from "../../../../shared/interfaces";
 import { getTrackers } from "../../../axios/tracker";
 import { PresentationWrapper, SelectGroup } from "./styled";
 
-const DEFAULT_LIMIT = 10;
+const DEFAULT_LIMIT = 20;
 const { useEffect, useState } = React;
 const { Option } = Select;
 
@@ -18,15 +18,15 @@ export const ChartPage = (): JSX.Element => {
   const [trackers, setTrackers] = useState<Array<PresentationTracker>>([]);
 
   const [source, setSource] = useState<TrackerSources>(TrackerSources.REDUX_V1);
-  const [action, setAction] = useState<TrackerActions>(TrackerActions.FETCH_BLOG_LIST);
+  const [action, setAction] = useState<TrackerActions>(TrackerActions.CHECKBOX_FILTER);
   const [limit, setLimit] = useState<number>(DEFAULT_LIMIT);
-  const [sortByDataAmount, setSortByDataAmount] = useState<boolean>(false);
+  const [sortByDataAmount, setSortByDataAmount] = useState<boolean>(true);
 
   const fetchTrackers = async () => {
     try {
       const response = await getTrackers({ source, action, limit });
 
-      setTrackers(response.map<PresentationTracker>((t) => ({ ...t, ...t.time })));
+      setTrackers(response.map<PresentationTracker>((t) => ({ ...t, ...t.averageTime })));
     } catch (err) {
       console.log(err);
     }
@@ -66,7 +66,7 @@ export const ChartPage = (): JSX.Element => {
         </Select>
         <Select
           id="action-select"
-          defaultValue={TrackerActions.FETCH_BLOG_LIST}
+          defaultValue={TrackerActions.CHECKBOX_FILTER}
           onChange={(value) => setAction(Number(value))}
         >
           {Object.entries(TrackerActions)
@@ -88,10 +88,10 @@ export const ChartPage = (): JSX.Element => {
       </SelectGroup>
       <Chart
         id="chart"
-        title="Critical points"
+        title="Update time to affected objects"
         dataSource={sortedTrackers}
       >
-        <CommonSeriesSettings argumentField="_id" type="stackedBar" />
+        <CommonSeriesSettings argumentField="affectedItems" type="stackedBar" />
         <Series
           valueField="commitTime"
           name="Commit time"
