@@ -13,7 +13,7 @@ import { PresentationTracker } from "./interafaces";
 import { PresentationWrapper, SelectGroup } from "./styled";
 import { prettifyKey, renderSeries } from "./utils";
 
-const DEFAULT_LIMIT = 20;
+const DEFAULT_LIMIT = 10;
 const { useEffect, useState, useMemo } = React;
 const { Option } = Select;
 
@@ -60,8 +60,6 @@ export const ChartPage = ({ id }: PageProps): JSX.Element => {
   }, [source, action, limit]);
 
   const updateParam = (type: "action" | "source" | "limit") => (value: TrackerSources | TrackerActions | number) => {
-    console.log(type);
-    console.log(value);
     switch (type) {
       case "action":
         setAction(Number(value));
@@ -127,7 +125,7 @@ export const ChartPage = ({ id }: PageProps): JSX.Element => {
         <Tooltip
           enabled
           location="edge"
-          customizeTooltip={(arg: any) => ({ text: `[Redux] ${arg.seriesName}: ${arg.valueText}ms` })}
+          customizeTooltip={(arg: any) => ({ text: `[${TrackerSources[source].toLowerCase()}] \n [${TrackerActions[action].toLowerCase()}] \n ${arg.seriesName}: ${arg.valueText}ms` })}
         />
       </Chart>
     </PresentationWrapper>

@@ -13,7 +13,7 @@ type TProps = {
   blog: IBlog
 }
 
-export const BlogItem = React.memo(({ blog }: TProps): JSX.Element => (
+export const BlogItem = ({ blog }: TProps): JSX.Element => (
   <Card
     hoverable
     style={{ width: "33%" }}
@@ -44,4 +44,4 @@ export const BlogItem = React.memo(({ blog }: TProps): JSX.Element => (
     </FooterWrapper>
 
   </Card>
-), (prevProps, nextProps) => JSON.stringify(prevProps.blog) === JSON.stringify(nextProps.blog));
+);

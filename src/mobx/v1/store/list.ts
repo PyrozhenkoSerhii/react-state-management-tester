@@ -46,6 +46,7 @@ class BlogListState {
         time: Date.now(),
         affectedItems: blogs.length,
       });
+
       runInAction(() => {
         this.defaultFilters = filters;
         this.filters = filters;

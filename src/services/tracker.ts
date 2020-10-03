@@ -42,11 +42,13 @@ class TrackerServiceClass {
       return;
     }
 
+    const operationPartTime = operationPartTimestamp.time - started.time;
+
     this.setOperationPart({
       source: started.source,
       position: started.position,
       action: started.action,
-      time: operationPartTimestamp.time - started.time,
+      time: operationPartTime === 0 ? 1 : operationPartTime,
       affectedItems: operationPartTimestamp.affectedItems || started.affectedItems,
     });
 

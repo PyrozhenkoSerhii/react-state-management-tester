@@ -29,6 +29,7 @@ export const BlogListContent = styled.div`
   flex-wrap: wrap;
   width: 75%;
   height: 100%;
+  flex-grow: 1;
 `;
 
 export const BlogListSidebar = styled.div`

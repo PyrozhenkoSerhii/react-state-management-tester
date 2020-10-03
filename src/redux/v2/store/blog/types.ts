@@ -55,4 +55,5 @@ export interface IBlogsState {
   error: string | null;
   defaultFilters: Filters;
   filters: Filters;
+  case: string;
 }

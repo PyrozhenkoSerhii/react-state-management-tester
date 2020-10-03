@@ -13,9 +13,9 @@ const populate = async () => {
     return;
   }
 
-  const mockBlogs = generateBlog(200);
-  const mockComments = generateComments(50);
-  const mockUsers = generateUsers(10);
+  const mockBlogs = generateBlog(500);
+  const mockComments = generateComments(100);
+  const mockUsers = generateUsers(30);
 
   await UserModel.deleteMany({});
 

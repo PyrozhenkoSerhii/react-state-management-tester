@@ -59,7 +59,7 @@ export const generateComments = (amount: number): Array<TMockComment> => {
   while (result.length < amount) {
     result.push({
       rating: random(-100, 100),
-      content: lorem.generateSentences(random(1, 3)),
+      content: lorem.generateSentences(random(1, 5)),
     });
   }
 

@@ -10,7 +10,7 @@ module.exports = (env) => merge(baseConfig, {
     historyApiFallback: true,
     open: true,
     hot: true,
-    host: "localhost",
+    host: "0.0.0.0",
     port: env.port || 80,
   },
   devtool: 'source-map',
