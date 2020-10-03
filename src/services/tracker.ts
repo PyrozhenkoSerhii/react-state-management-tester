@@ -60,6 +60,7 @@ class TrackerServiceClass {
     console.log(operationPart);
     switch (operationPart.source) {
       case TrackerSources.MOBX_V1:
+      case TrackerSources.MOBX_V2:
         if (!this.mobxOperation && operationPart.position === TrackerPositions.MOBX_ACTION_INIT) {
           this.mobxOperation = {
             source: operationPart.source,

@@ -3,7 +3,7 @@ import { Spin, Select, InputNumber } from "antd";
 import { useLocation, useHistory } from "react-router-dom";
 import { parse, stringify } from "query-string";
 import {
-  Chart, Series, CommonSeriesSettings, Legend, ValueAxis, Title, Export, Tooltip,
+  Chart, CommonSeriesSettings, Legend, ValueAxis, Title, Export, Tooltip,
 } from "devextreme-react/chart";
 
 import { TrackerActions, TrackerSources } from "../../../../shared/interfaces";
@@ -11,7 +11,7 @@ import { getTrackers } from "../../../axios/tracker";
 
 import { PresentationTracker } from "./interafaces";
 import { PresentationWrapper, SelectGroup } from "./styled";
-import { prettifyKey } from "./utils";
+import { prettifyKey, renderSeries } from "./utils";
 
 const DEFAULT_LIMIT = 20;
 const { useEffect, useState, useMemo } = React;
@@ -114,14 +114,7 @@ export const ChartPage = ({ id }: PageProps): JSX.Element => {
         dataSource={trackers}
       >
         <CommonSeriesSettings argumentField="affectedItems" type="stackedBar" />
-        <Series
-          valueField="commitTime"
-          name="Commit time"
-        />
-        <Series
-          valueField="reduceTime"
-          name="Reduce Time"
-        />
+        {renderSeries(source, action)}
         <ValueAxis position="left">
           <Title text="ms" />
         </ValueAxis>

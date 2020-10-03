@@ -10,7 +10,8 @@ export enum TrackerSources {
   REDUX_V1 = 1,
   REDUX_V2 = 2,
   MOBX_V1 = 3,
-  CONTEXT_V1 = 4
+  MOBX_V2 = 4,
+  CONTEXT_V1 = 5,
 }
 
 export enum TrackerActions {
