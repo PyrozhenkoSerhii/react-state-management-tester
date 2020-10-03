@@ -43,7 +43,7 @@ trackerRouter.post(API.TRACKER_REDUX, async (req: TypedRequest<ReduxOperation>, 
 
     existing.save();
 
-    return res.status(201);
+    return res.sendStatus(201);
   }
 
   const tracker: ITracker<ReduxOperationTime> = {
@@ -92,7 +92,7 @@ trackerRouter.post(API.TRACKER_REDUX_SAGA, async (
 
     existing.save();
 
-    return res.status(201);
+    return res.sendStatus(201);
   }
 
   const tracker: ITracker<ReduxSagaOperationTime> = {
@@ -139,7 +139,7 @@ trackerRouter.post(API.TRACKER_MOBX, async (
 
     existing.save();
 
-    return res.status(201);
+    return res.sendStatus(201);
   }
 
   const tracker: ITracker<MobxOperationTime> = {

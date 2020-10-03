@@ -55,6 +55,7 @@ export const BlogListPage = observer((): JSX.Element => {
         action: TrackerActions.CHECKBOX_FILTER,
         state: "finished",
         time: Date.now(),
+        affectedItems: blogs.length,
       });
       setFromMobx(null);
     }
