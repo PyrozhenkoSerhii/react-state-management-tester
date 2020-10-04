@@ -63,6 +63,8 @@ export interface ContextOperationTime {
   commitTime: number;
 }
 
+export type TrackerTime = MobxOperationTime | ReduxOperationTime | ReduxSagaOperationTime | ContextOperationTime
+
 export interface ReduxSagaOperation extends BaseOperation, ReduxSagaOperationTime {}
 
 export interface ReduxOperation extends BaseOperation, ReduxOperationTime {}

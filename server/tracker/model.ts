@@ -1,13 +1,5 @@
 import { Schema, model, Document } from "mongoose";
-import {
-  TrackerActions,
-  TrackerSources,
-  MobxOperationTime,
-  ReduxOperationTime,
-  ReduxSagaOperationTime,
-} from "../../shared/interfaces";
-
-export type TrackerTime = MobxOperationTime | ReduxOperationTime | ReduxSagaOperationTime
+import { TrackerActions, TrackerSources, TrackerTime } from "../../shared/interfaces";
 
 export interface ITracker<T> {
   source: TrackerSources;

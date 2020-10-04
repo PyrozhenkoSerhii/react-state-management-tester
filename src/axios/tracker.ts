@@ -6,10 +6,11 @@ import {
   ReduxSagaOperation,
   GetTrackerQuery,
   ContextOperation,
+  TrackerTime,
 } from "../../shared/interfaces";
 import { API } from "../../shared/api";
 
-import { ITracker, TrackerTime } from "../../server/tracker/model";
+import { ITracker } from "../../server/tracker/model";
 
 export const sendReduxOperationTrackerInfo = async (
   operation: ReduxOperation,
