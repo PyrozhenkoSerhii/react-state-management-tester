@@ -12,6 +12,14 @@ import {
 import { TrackerService } from "../../../services/tracker";
 import { TrackerActions, TrackerSources, TrackerPositions } from "../../../../shared/interfaces";
 
+type FilterCallback = (item: IBlog) => boolean;
+
+const mutationFilter = (arr: Array<IBlog>, callback: FilterCallback) => {
+  for (let i = arr.length - 1; i >= 0; i -= 1) {
+    if (!callback(arr[i])) arr.splice(i, 1);
+  }
+};
+
 class BlogListState {
   @observable defaultBlogs: Array<IBlog> = [];
 
@@ -87,21 +95,34 @@ class BlogListState {
         return updated;
       });
 
-      const blogs = this.defaultBlogs.map(
-        (blog) => (isBlogPasses(blog, filters) ? blog : null),
-      ).filter(Boolean);
+      if (value) {
+        // we've added a new filter, can use current blogs
+        TrackerService.setTimeStamps({
+          source: TrackerSources.MOBX_V1,
+          position: TrackerPositions.MOBX_ACTION_COMMIT,
+          action: TrackerActions.CHECKBOX_FILTER,
+          state: "started",
+          time: Date.now(),
+        });
 
-      TrackerService.setTimeStamps({
-        source: TrackerSources.MOBX_V1,
-        position: TrackerPositions.MOBX_ACTION_COMMIT,
-        action: TrackerActions.CHECKBOX_FILTER,
-        state: "started",
-        time: Date.now(),
-        affectedItems: blogs.length,
-      });
+        mutationFilter(this.blogs, (blog) => isBlogPasses(blog, filters));
 
-      this.blogs = blogs;
-      this.filters = filters;
+        this.filters = filters;
+      } else {
+        // we've removed some of the filters. Have to use default blogs
+        const blogs = this.defaultBlogs.map(
+          (blog) => (isBlogPasses(blog, filters) ? blog : null),
+        ).filter(Boolean);
+        TrackerService.setTimeStamps({
+          source: TrackerSources.MOBX_V1,
+          position: TrackerPositions.MOBX_ACTION_COMMIT,
+          action: TrackerActions.CHECKBOX_FILTER,
+          state: "started",
+          time: Date.now(),
+        });
+        this.blogs = blogs;
+        this.filters = filters;
+      }
     });
   }
 }
