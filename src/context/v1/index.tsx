@@ -2,13 +2,14 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 
-const App = () => (
-  <div>Context v1 App</div>
-);
+import { BlogsStore } from "./context/blogs/store";
+import { BlogListPage } from "./pages/blogs";
 
 ReactDOM.render(
   <BrowserRouter>
-    <App />
+    <BlogsStore>
+      <BlogListPage />
+    </BlogsStore>
   </BrowserRouter>,
   document.getElementById("app"),
 );
