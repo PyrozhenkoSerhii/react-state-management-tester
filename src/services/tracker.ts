@@ -3,16 +3,18 @@ import {
   OperationPartTimestamp,
   OperationPart,
   ReduxOperation,
-  MobxObservableActionOperation,
+  MobxOperation,
   ReduxSagaOperation,
   TrackerSources,
   TrackerPositions,
+  ContextOperation,
 } from "../../shared/interfaces";
 
 import {
-  sendMobxObservableActionOperationTrackerInfo,
+  sendMobxOperationTrackerInfo,
   sendReduxOperationTrackerInfo,
   sendReduxSagaOperationTrackerInfo,
+  sendContextOperationTrackerInfo,
 } from "../axios/tracker";
 
 const searchOperationPartTimestamp = (
@@ -27,7 +29,9 @@ class TrackerServiceClass {
 
   reduxSagaOperation: ReduxSagaOperation = null;
 
-  mobxOperation: MobxObservableActionOperation = null;
+  mobxOperation: MobxOperation = null;
+
+  contextOperation: ContextOperation = null;
 
   public setTimeStamps = (operationPartTimestamp: OperationPartTimestamp) => {
     console.log(operationPartTimestamp);
@@ -76,7 +80,7 @@ class TrackerServiceClass {
           const operation = this.mobxOperation;
           operation.commitTime = operationPart.time;
           operation.affectedItems = operationPart.affectedItems;
-          sendMobxObservableActionOperationTrackerInfo(operation);
+          sendMobxOperationTrackerInfo(operation);
           this.mobxOperation = null;
         }
         break;
@@ -127,6 +131,26 @@ class TrackerServiceClass {
           this.reduxOperation.affectedItems = operationPart.affectedItems;
           sendReduxOperationTrackerInfo(this.reduxOperation);
           this.reduxOperation = null;
+        }
+        break;
+      case TrackerSources.CONTEXT_V1:
+        if (!this.contextOperation && operationPart.position === TrackerPositions.CONTEXT_INIT) {
+          this.contextOperation = {
+            source: operationPart.source,
+            action: operationPart.action,
+            initTime: operationPart.time,
+            dispatchReducerTime: null,
+            commitTime: null,
+            affectedItems: operationPart.affectedItems || null,
+          };
+        } else if (this.contextOperation && operationPart.position === TrackerPositions.CONTEXT_DISPATCH_REDUCER) {
+          this.contextOperation.dispatchReducerTime = operationPart.time;
+        } else if (this.contextOperation && operationPart.position === TrackerPositions.CONTEXT_COMMIT) {
+          const operation = this.contextOperation;
+          operation.commitTime = operationPart.time;
+          operation.affectedItems = operationPart.affectedItems;
+          sendContextOperationTrackerInfo(operation);
+          this.contextOperation = null;
         }
         break;
       default:

@@ -4,7 +4,7 @@ import { API } from "../../shared/api";
 import { TypedRequest } from "../interfaces/Request";
 import { ITracker, TrackerModel } from "./model";
 import {
-  MobxObservableActionOperation,
+  MobxOperation,
   ReduxOperation,
   ReduxSagaOperation,
   TrackerSources,
@@ -112,7 +112,7 @@ trackerRouter.post(API.TRACKER_REDUX_SAGA, async (
 });
 
 trackerRouter.post(API.TRACKER_MOBX, async (
-  req: TypedRequest<MobxObservableActionOperation>,
+  req: TypedRequest<MobxOperation>,
   res: Response,
 ) => {
   const { source, action, initTime, commitTime, affectedItems } = req.body;

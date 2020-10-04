@@ -67,11 +67,11 @@ export interface ReduxSagaOperation extends BaseOperation, ReduxSagaOperationTim
 
 export interface ReduxOperation extends BaseOperation, ReduxOperationTime {}
 
-export interface MobxObservableActionOperation extends BaseOperation, MobxOperationTime {}
+export interface MobxOperation extends BaseOperation, MobxOperationTime {}
 
 export interface ContextOperation extends BaseOperation, ContextOperationTime {}
 
-export type TrackerDataList = Array<MobxObservableActionOperation|ReduxOperation|ReduxSagaOperation|ContextOperation>
+export type TrackerDataList = Array<MobxOperation|ReduxOperation|ReduxSagaOperation|ContextOperation>
 
 export interface GetTrackerQuery {
   source?: TrackerSources;

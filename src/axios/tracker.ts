@@ -1,10 +1,11 @@
 import { stringify } from "query-string";
 import { instance } from "./api";
 import {
-  MobxObservableActionOperation,
+  MobxOperation,
   ReduxOperation,
   ReduxSagaOperation,
   GetTrackerQuery,
+  ContextOperation,
 } from "../../shared/interfaces";
 import { API } from "../../shared/api";
 
@@ -32,11 +33,22 @@ export const sendReduxSagaOperationTrackerInfo = async (
   }
 };
 
-export const sendMobxObservableActionOperationTrackerInfo = async (
-  operation: MobxObservableActionOperation,
+export const sendMobxOperationTrackerInfo = async (
+  operation: MobxOperation,
 ): Promise<boolean> => {
   try {
     await instance.post(API.TRACKER_MOBX, operation);
+    return true;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const sendContextOperationTrackerInfo = async (
+  operation: ContextOperation,
+): Promise<boolean> => {
+  try {
+    await instance.post(API.TRACKER_CONTEXT, operation);
     return true;
   } catch (err) {
     throw new Error(err);
