@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import {
   OperationPartTimestamp,
   OperationPart,
@@ -79,14 +80,14 @@ class TrackerServiceClass {
           this.mobxOperation = null;
         }
         break;
-      default:
       case TrackerSources.REDUX_V1:
-        if (!this.reduxSagaOperation && operationPart.position === TrackerPositions.REDUX_SAGA) {
+      case TrackerSources.REDUX_V2:
+        if (!this.reduxSagaOperation && operationPart.position === TrackerPositions.REDUX_DISPATCH_SAGA) {
           this.reduxSagaOperation = {
             source: operationPart.source,
             action: operationPart.action,
-            sagaTime: operationPart.time,
-            reduceTime: null,
+            dispatchSagaTime: operationPart.time,
+            dispatchReducerTime: null,
             commitTime: null,
             affectedItems: operationPart.affectedItems || null,
           };
@@ -94,8 +95,8 @@ class TrackerServiceClass {
         }
         if (this.reduxSagaOperation) {
           switch (operationPart.position) {
-            case TrackerPositions.REDUX_REDUCE:
-              this.reduxSagaOperation.reduceTime = operationPart.time;
+            case TrackerPositions.REDUX_DISPATCH_REDUCER:
+              this.reduxSagaOperation.dispatchReducerTime = operationPart.time;
               break;
             case TrackerPositions.REDUX_COMMIT:
               sendReduxSagaOperationTrackerInfo({
@@ -111,11 +112,11 @@ class TrackerServiceClass {
           }
           return;
         }
-        if (!this.reduxOperation && operationPart.position === TrackerPositions.REDUX_REDUCE) {
+        if (!this.reduxOperation && operationPart.position === TrackerPositions.REDUX_DISPATCH_REDUCER) {
           this.reduxOperation = {
             source: operationPart.source,
             action: operationPart.action,
-            reduceTime: operationPart.time,
+            dispatchReducerTime: operationPart.time,
             commitTime: null,
             affectedItems: operationPart.affectedItems || null,
           };
@@ -127,6 +128,8 @@ class TrackerServiceClass {
           sendReduxOperationTrackerInfo(this.reduxOperation);
           this.reduxOperation = null;
         }
+        break;
+      default:
         break;
     }
   }

@@ -27,7 +27,7 @@ export const BlogListPage = (): JSX.Element => {
   useEffect(() => {
     TrackerService.setTimeStamps({
       source: TrackerSources.REDUX_V2,
-      position: TrackerPositions.REDUX_SAGA,
+      position: TrackerPositions.REDUX_DISPATCH_SAGA,
       action: TrackerActions.FETCH_BLOG_LIST,
       state: "started",
       time: Date.now(),
@@ -38,7 +38,7 @@ export const BlogListPage = (): JSX.Element => {
   const onFilerChange = (title: string, value: boolean | number, secondValue: number): void => {
     TrackerService.setTimeStamps({
       source: TrackerSources.REDUX_V2,
-      position: TrackerPositions.REDUX_REDUCE,
+      position: TrackerPositions.REDUX_DISPATCH_REDUCER,
       action: TrackerActions.CHECKBOX_FILTER,
       state: "started",
       time: Date.now(),

@@ -13,7 +13,7 @@
     "client-dev-presentation": "webpack-dev-server --config webpack.config.dev.js --env.project=presentation --env.port=80",
     "server-dev": "nodemon -r dotenv/config ./server/index.ts",
     "server-build": "tsc --project ./server/",
-    "lint-client": "eslint src",
+    "lint": "eslint --ext .tsx,.ts .",
     "db-populate": "npx ts-node -r dotenv/config ./server/utils/populate.ts",
     "db-clear-tracker": "npx ts-node -r dotenv/config ./server/utils/clearTracker.ts"
   },

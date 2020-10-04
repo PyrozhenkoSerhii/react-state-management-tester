@@ -97,7 +97,7 @@ export const blogsReducer = (
     case FETCH_BLOGS_SUCCESS:
       TrackerService.setTimeStamps({
         source: TrackerSources.REDUX_V2,
-        position: TrackerPositions.REDUX_REDUCE,
+        position: TrackerPositions.REDUX_DISPATCH_REDUCER,
         action: TrackerActions.FETCH_BLOG_LIST,
         state: "finished",
         time: Date.now(),
@@ -134,7 +134,7 @@ export const blogsReducer = (
     case UPDATE_FILTERS: {
       TrackerService.setTimeStamps({
         source: TrackerSources.REDUX_V2,
-        position: TrackerPositions.REDUX_REDUCE,
+        position: TrackerPositions.REDUX_DISPATCH_REDUCER,
         action: TrackerActions.CHECKBOX_FILTER,
         state: "finished",
         time: Date.now(),

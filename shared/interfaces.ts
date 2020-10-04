@@ -1,9 +1,13 @@
+/* eslint-disable max-len */
 export enum TrackerPositions {
-  REDUX_REDUCE = 1,
-  REDUX_SAGA = 2,
+  REDUX_DISPATCH_SAGA = 1,
+  REDUX_DISPATCH_REDUCER = 2,
   REDUX_COMMIT = 3,
   MOBX_ACTION_INIT = 4,
   MOBX_ACTION_COMMIT = 5,
+  CONTEXT_INIT = 6,
+  CONTEXT_DISPATCH_REDUCER = 7,
+  CONTEXT_COMMIT = 8,
 }
 
 export enum TrackerSources {
@@ -38,18 +42,24 @@ interface BaseOperation {
 }
 
 export interface ReduxSagaOperationTime {
-  sagaTime: number;
-  reduceTime: number;
+  dispatchSagaTime: number;
+  dispatchReducerTime: number;
   commitTime: number;
 }
 
 export interface ReduxOperationTime {
-  reduceTime: number;
+  dispatchReducerTime: number;
   commitTime: number;
 }
 
 export interface MobxOperationTime {
   initTime: number;
+  commitTime: number;
+}
+
+export interface ContextOperationTime {
+  initTime: number;
+  dispatchReducerTime: number;
   commitTime: number;
 }
 
@@ -59,7 +69,9 @@ export interface ReduxOperation extends BaseOperation, ReduxOperationTime {}
 
 export interface MobxObservableActionOperation extends BaseOperation, MobxOperationTime {}
 
-export type TrackerDataList = Array<MobxObservableActionOperation|ReduxOperation|ReduxSagaOperation>
+export interface ContextOperation extends BaseOperation, ContextOperationTime {}
+
+export type TrackerDataList = Array<MobxObservableActionOperation|ReduxOperation|ReduxSagaOperation|ContextOperation>
 
 export interface GetTrackerQuery {
   source?: TrackerSources;

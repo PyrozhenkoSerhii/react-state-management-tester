@@ -15,17 +15,17 @@ export const renderSeries = (
     case TrackerSources.REDUX_V2:
       if (action === TrackerActions.FETCH_BLOG_LIST) {
         series.push(<Series
-          valueField="sagaTime"
-          name="Saga time"
+          valueField="dispatchSagaTime"
+          name="Dispatch saga time"
         />);
       }
       series.push(<Series
-        valueField="commitTime"
-        name="Commit time"
+        valueField="dispatchReducerTime"
+        name="Dispatch reduce Time"
       />);
       series.push(<Series
-        valueField="reduceTime"
-        name="Reduce Time"
+        valueField="commitTime"
+        name="Commit time"
       />);
       break;
     case TrackerSources.MOBX_V1:

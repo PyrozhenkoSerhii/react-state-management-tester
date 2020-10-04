@@ -13,7 +13,7 @@ function* fetchBlogsAsync(action: BlogTypes.IFetchBlogsAction): SagaIterator {
   try {
     TrackerService.setTimeStamps({
       source: TrackerSources.REDUX_V1,
-      position: TrackerPositions.REDUX_SAGA,
+      position: TrackerPositions.REDUX_DISPATCH_SAGA,
       action: TrackerActions.FETCH_BLOG_LIST,
       state: "finished",
       time: Date.now(),
@@ -24,7 +24,7 @@ function* fetchBlogsAsync(action: BlogTypes.IFetchBlogsAction): SagaIterator {
 
     TrackerService.setTimeStamps({
       source: TrackerSources.REDUX_V1,
-      position: TrackerPositions.REDUX_REDUCE,
+      position: TrackerPositions.REDUX_DISPATCH_REDUCER,
       action: TrackerActions.FETCH_BLOG_LIST,
       state: "started",
       time: Date.now(),

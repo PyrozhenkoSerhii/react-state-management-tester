@@ -18,11 +18,11 @@ import {
 export const trackerRouter = Router();
 
 trackerRouter.post(API.TRACKER_REDUX, async (req: TypedRequest<ReduxOperation>, res: Response) => {
-  const { source, action, reduceTime, commitTime, affectedItems } = req.body;
+  const { source, action, dispatchReducerTime, commitTime, affectedItems } = req.body;
 
-  const time: ReduxOperationTime = { reduceTime, commitTime };
+  const time: ReduxOperationTime = { dispatchReducerTime, commitTime };
 
-  console.log(`[${TrackerSources[source]}][${TrackerActions[action]}] [redux variation] ${reduceTime}ms + ${commitTime}ms. ${affectedItems} objects affected`);
+  console.log(`[${TrackerSources[source]}][${TrackerActions[action]}] [redux variation] ${dispatchReducerTime}ms + ${commitTime}ms. ${affectedItems} objects affected`);
 
   const existing = await TrackerModel.findOne({ source, action, affectedItems });
   if (existing) {
@@ -32,12 +32,12 @@ trackerRouter.post(API.TRACKER_REDUX, async (req: TypedRequest<ReduxOperation>, 
 
     const timeSum: ReduxOperationTime = timeList
       .reduce<ReduxOperationTime>((acc: ReduxOperationTime, item: ReduxOperationTime) => ({
-        reduceTime: acc.reduceTime + item.reduceTime,
+        dispatchReducerTime: acc.dispatchReducerTime + item.dispatchReducerTime,
         commitTime: acc.commitTime + item.commitTime,
-      }), { reduceTime: 0, commitTime: 0 });
+      }), { dispatchReducerTime: 0, commitTime: 0 });
 
     existing.averageTime = {
-      reduceTime: Number((timeSum.reduceTime / timeList.length).toFixed(2)),
+      dispatchReducerTime: Number((timeSum.dispatchReducerTime / timeList.length).toFixed(2)),
       commitTime: Number((timeSum.commitTime / timeList.length).toFixed(2)),
     };
 
@@ -64,11 +64,13 @@ trackerRouter.post(API.TRACKER_REDUX_SAGA, async (
   req: TypedRequest<ReduxSagaOperation>,
   res: Response,
 ) => {
-  const { source, action, sagaTime, reduceTime, commitTime, affectedItems } = req.body;
+  const {
+    source, action, dispatchSagaTime, dispatchReducerTime, commitTime, affectedItems,
+  } = req.body;
 
-  console.log(`[${TrackerSources[source]}][${TrackerActions[action]}] [redux-saga variation]:  ${sagaTime}ms + ${reduceTime}ms + ${commitTime}ms. ${affectedItems} objects affected`);
+  console.log(`[${TrackerSources[source]}][${TrackerActions[action]}] [redux-saga variation]:  ${dispatchSagaTime}ms + ${dispatchReducerTime}ms + ${commitTime}ms. ${affectedItems} objects affected`);
 
-  const time: ReduxSagaOperationTime = { sagaTime, reduceTime, commitTime };
+  const time: ReduxSagaOperationTime = { dispatchSagaTime, dispatchReducerTime, commitTime };
 
   const existing = await TrackerModel.findOne({ source, action, affectedItems });
   if (existing) {
@@ -78,15 +80,15 @@ trackerRouter.post(API.TRACKER_REDUX_SAGA, async (
 
     const timeSum: ReduxSagaOperationTime = timeList.reduce<ReduxSagaOperationTime>(
       (acc: ReduxSagaOperationTime, item: ReduxSagaOperationTime) => ({
-        sagaTime: acc.sagaTime + item.sagaTime,
-        reduceTime: acc.reduceTime + item.reduceTime,
+        dispatchSagaTime: acc.dispatchSagaTime + item.dispatchSagaTime,
+        dispatchReducerTime: acc.dispatchReducerTime + item.dispatchReducerTime,
         commitTime: acc.commitTime + item.commitTime,
-      }), { sagaTime: 0, reduceTime: 0, commitTime: 0 },
+      }), { dispatchSagaTime: 0, dispatchReducerTime: 0, commitTime: 0 },
     );
 
     existing.averageTime = {
-      sagaTime: Number((timeSum.sagaTime / timeList.length).toFixed(2)),
-      reduceTime: Number((timeSum.reduceTime / timeList.length).toFixed(2)),
+      dispatchSagaTime: Number((timeSum.dispatchSagaTime / timeList.length).toFixed(2)),
+      dispatchReducerTime: Number((timeSum.dispatchReducerTime / timeList.length).toFixed(2)),
       commitTime: Number((timeSum.commitTime / timeList.length).toFixed(2)),
     };
 

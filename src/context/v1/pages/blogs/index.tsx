@@ -1,49 +1,45 @@
 import * as React from "react";
-import { parse } from "query-string";
 import { useLocation } from "react-router-dom";
+import { parse } from "query-string";
 
-import { useSelector, useDispatch } from "react-redux";
-import { fetchBlogsAsync, updateFilters } from "../../store/blog/actions";
-import { IApplicationState } from "../../store/types";
+import { BlogsContext } from "../../context/blogs/store";
 
 import { ListComponent } from "./List";
 import { Filters } from "../../../../components/Filters";
+import { BlogListBodyWrapper, BlogListContent, BlogListHeaderWrapper, BlogListSidebar, BlogListWrapper } from "../../../../components/styled";
+
 import { TrackerService } from "../../../../services/tracker";
 import { TrackerActions, TrackerSources, TrackerPositions } from "../../../../../shared/interfaces";
 
-import { BlogListBodyWrapper, BlogListContent, BlogListHeaderWrapper, BlogListSidebar, BlogListWrapper } from "../../../../components/styled";
-
-const { useEffect, useMemo } = React;
+const { useContext, useEffect, useMemo } = React;
 
 export const BlogListPage = (): JSX.Element => {
-  const dispatch = useDispatch();
-
   const { search } = useLocation();
 
   const { limit } = useMemo(() => parse(search), [search]);
 
-  const { filters } = useSelector((state: IApplicationState) => state.blogs);
+  const { updateFilters, filters, fetchBlogs } = useContext(BlogsContext);
 
   useEffect(() => {
     TrackerService.setTimeStamps({
-      source: TrackerSources.REDUX_V1,
-      position: TrackerPositions.REDUX_DISPATCH_SAGA,
+      source: TrackerSources.CONTEXT_V1,
+      position: TrackerPositions.CONTEXT_INIT,
       action: TrackerActions.FETCH_BLOG_LIST,
       state: "started",
       time: Date.now(),
     });
-    dispatch(fetchBlogsAsync(limit ? Number(limit) : 500));
+    fetchBlogs(limit ? Number(limit) : 500);
   }, []);
 
-  const onFilerChange = (title: string, value: boolean | number, secondValue: number): void => {
+  const updateBlogs = (title: string, value: boolean | number, secondValue: number) => {
     TrackerService.setTimeStamps({
-      source: TrackerSources.REDUX_V1,
-      position: TrackerPositions.REDUX_DISPATCH_REDUCER,
+      source: TrackerSources.CONTEXT_V1,
+      position: TrackerPositions.CONTEXT_INIT,
       action: TrackerActions.CHECKBOX_FILTER,
       state: "started",
       time: Date.now(),
     });
-    dispatch(updateFilters(title, value, secondValue));
+    updateFilters(title, value, secondValue);
   };
 
   return (
@@ -55,7 +51,7 @@ export const BlogListPage = (): JSX.Element => {
         </BlogListContent>
         <BlogListSidebar>
           {filters && (
-            <Filters filters={filters} onChange={onFilerChange} />
+            <Filters filters={filters} onChange={updateBlogs} />
           )}
         </BlogListSidebar>
       </BlogListBodyWrapper>

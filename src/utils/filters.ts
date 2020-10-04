@@ -7,7 +7,6 @@ import {
 import { blogTags } from "../../server/blogs/tags";
 import { IBlog } from "../interfaces/Blog";
 
-
 export const generateFilters = (
   blogs: Array<IBlog>,
 ): Array<IBooleanFilter|IValueFilter|IRangeFilter> => {

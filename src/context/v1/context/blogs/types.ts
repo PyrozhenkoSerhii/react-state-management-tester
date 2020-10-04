@@ -31,5 +31,6 @@ export interface IBlogsState {
 }
 
 export type IBlogsContext = IBlogsState & {
-  updateFilters?: (title: string, value: boolean, secondValue: number) => void,
+  updateFilters?: (title: string, value: boolean | number, secondValue: number) => void,
+  fetchBlogs?: (limit: number) => void,
 }
