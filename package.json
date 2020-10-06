@@ -1,25 +1,44 @@
 {
   "name": "state-management-helper",
-  "version": "1.0.0",
-  "description": "An app to help developers to choose right state management approach for their current project",
-  "main": "index.js",
+  "description": "A platform for React global state management approaches testing",
   "scripts": {
     "client-build": "webpack --config webpack.config.prod.js --mode production",
     "client-dev-redux-v1": "webpack-dev-server --config webpack.config.dev.js  --env.project=redux/v1 --env.port=4011",
     "client-dev-redux-v2": "webpack-dev-server --config webpack.config.dev.js --env.project=redux/v2 --env.port=4012",
-    "client-dev-mobx-v1": "webpack-dev-server --config webpack.config.dev.js  --env.project=mobx/v1 --env.port=4000",
+    "client-dev-mobx-v1": "webpack-dev-server --config webpack.config.dev.js  --env.project=mobx/v1 --env.port=4021",
     "client-dev-mobx-v2": "webpack-dev-server --config webpack.config.dev.js  --env.project=mobx/v2 --env.port=4022",
     "client-dev-context-v1": "webpack-dev-server --config webpack.config.dev.js --env.project=context/v1 --env.port=4031",
     "client-dev-presentation": "webpack-dev-server --config webpack.config.dev.js --env.project=presentation --env.port=80",
     "server-dev": "nodemon -r dotenv/config ./server/index.ts",
+    "server-test": "better-npm-run server-test",
     "server-build": "tsc --project ./server/",
-    "lint": "eslint --ext .tsx,.ts .",
     "db-populate": "npx ts-node -r dotenv/config ./server/utils/populate.ts",
-    "db-clear-tracker": "npx ts-node -r dotenv/config ./server/utils/clearTracker.ts"
+    "db-populate-test": "better-npm-run db-populate-test",
+    "db-clear-tracker": "npx ts-node -r dotenv/config ./server/utils/clearTracker.ts",
+    "db-clear-tracker-test": "better-npm-run db-populate-test",
+    "lint": "eslint --ext .tsx,.ts ."
   },
-  "keywords": [],
+  "betterScripts": {
+    "server-test": {
+      "command": "nodemon -r dotenv/config ./server/index.ts",
+      "env": {
+        "NODE_ENV": "test"
+      }
+    },
+    "db-populate-test": {
+      "command": "npx ts-node -r dotenv/config ./server/utils/populate.ts",
+      "env": {
+        "NODE_ENV": "test"
+      }
+    },
+    "db-clear-tracker-test": {
+      "command": "npx ts-node -r dotenv/config ./server/utils/clearTracker.ts",
+      "env": {
+        "NODE_ENV": "test"
+      }
+    }
+  },
   "author": "Serhii Pyrozhenko",
-  "license": "",
   "devDependencies": {
     "@babel/runtime": "^7.11.2",
     "@types/config": "0.0.36",
@@ -32,8 +51,6 @@
     "@types/react-redux": "^7.1.9",
     "@types/react-router-dom": "^5.1.5",
     "@types/styled-components": "^5.1.3",
-    "@types/swagger-jsdoc": "^3.0.2",
-    "@types/swagger-ui-express": "^4.1.2",
     "@typescript-eslint/eslint-plugin": "^3.10.1",
     "@typescript-eslint/parser": "^3.10.1",
     "clean-webpack-plugin": "^3.0.0",
