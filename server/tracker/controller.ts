@@ -187,7 +187,7 @@ trackerRouter.post(API.TRACKER_CONTEXT, async (
     );
 
     existing.averageTime = {
-      dispatchSagaTime: Number((timeSum.initTime / timeList.length).toFixed(2)),
+      initTime: Number((timeSum.initTime / timeList.length).toFixed(2)),
       dispatchReducerTime: Number((timeSum.dispatchReducerTime / timeList.length).toFixed(2)),
       commitTime: Number((timeSum.commitTime / timeList.length).toFixed(2)),
     };

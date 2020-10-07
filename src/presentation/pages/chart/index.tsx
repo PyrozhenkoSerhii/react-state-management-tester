@@ -111,7 +111,7 @@ export const ChartPage = ({ id }: PageProps): JSX.Element => {
         title="Update time to affected objects"
         dataSource={trackers}
       >
-        <CommonSeriesSettings argumentField="affectedItems" type="stackedBar" />
+        <CommonSeriesSettings argumentField="affectedItems" type="stackedBar" ignoreEmptyPoints />
         {renderSeries(source, action)}
         <ValueAxis position="left">
           <Title text="ms" />

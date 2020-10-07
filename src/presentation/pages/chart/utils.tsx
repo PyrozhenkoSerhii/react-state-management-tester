@@ -31,15 +31,28 @@ export const renderSeries = (
     case TrackerSources.MOBX_V1:
     case TrackerSources.MOBX_V2:
       series.push(<Series
-        valueField="commitTime"
-        name="Commit time"
-      />);
-      series.push(<Series
         valueField="initTime"
         name="Init Time"
       />);
+      series.push(<Series
+        valueField="commitTime"
+        name="Commit time"
+      />);
       break;
     case TrackerSources.CONTEXT_V1:
+      series.push(<Series
+        valueField="initTime"
+        name="Init time"
+      />);
+      series.push(<Series
+        valueField="dispatchReducerTime"
+        name="Dispatch reduce Time"
+      />);
+      series.push(<Series
+        valueField="commitTime"
+        name="Commit time"
+      />);
+      break;
     default:
       break;
   }

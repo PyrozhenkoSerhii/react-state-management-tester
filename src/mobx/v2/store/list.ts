@@ -72,9 +72,9 @@ class BlogListState {
       trackingComputed = true;
     }
 
-    this.filters.map((filter) => {
+    this.filters = this.filters.map((filter) => {
       if (filter.title !== title) return filter;
-      const updated = filter;
+      const updated = { ...filter };
 
       if (isBooleanFilter(updated)) {
         updated.value = !updated.value;
