@@ -49,7 +49,7 @@ export const ListComponent = observer((): JSX.Element => {
   return (
     <BlogListContent>
       {blogs && blogs.map((blog) => (
-        <BlogItem key={blog._id} blog={blog} />
+        <BlogItem key={blog._id} blog={blog} source={TrackerSources.MOBX_V2} />
       ))}
     </BlogListContent>
   );

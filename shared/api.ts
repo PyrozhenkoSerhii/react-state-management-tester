@@ -6,4 +6,5 @@ export const API = {
   TRACKER: "/tracker",
   BLOGS: "/blogs",
   USERS: "/users",
+  PROFILER: "/profiler",
 };

@@ -10,6 +10,7 @@ import { errorHandler } from "./middleware/errorHandler";
 
 import { blogsRouter } from "./blogs/controller";
 import { trackerRouter } from "./tracker/controller";
+import { profilerRouter } from "./profiler/controller";
 
 const app: express.Application = express();
 const port: number = config.get("api.port") || 8080;
@@ -42,6 +43,7 @@ app.get("/presentation", (req, res) => {
 
 app.use("/api", blogsRouter);
 app.use("/api", trackerRouter);
+app.use("/api", profilerRouter);
 
 app.use(errorHandler);
 

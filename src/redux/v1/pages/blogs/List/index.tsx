@@ -47,7 +47,7 @@ export const ListComponent = (): JSX.Element => {
   return (
     <BlogListContent>
       {blogs && blogs.map((blog) => (
-        <BlogItem key={blog._id} blog={blog} />
+        <BlogItem key={blog._id} blog={blog} source={TrackerSources.REDUX_V1} />
       ))}
     </BlogListContent>
   );

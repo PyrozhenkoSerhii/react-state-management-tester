@@ -80,3 +80,22 @@ export interface GetTrackerQuery {
   action?: TrackerActions;
   limit?: number;
 }
+
+interface ProfilerBaseItem {
+  min: number;
+  max: number;
+  count: number;
+  avg: number;
+}
+
+export interface ProfilerItem extends ProfilerBaseItem {
+  times: Array<number>;
+}
+
+export interface ProfilerRequest extends ProfilerBaseItem {
+  source: TrackerSources;
+}
+
+export interface GetProfilerQuery {
+  source?: TrackerSources;
+}
