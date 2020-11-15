@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Spin, Alert } from "antd";
 import { observer } from "mobx-react";
+import { toJS } from "mobx";
 
 import { blogListState } from "../../../store/list";
 
@@ -49,7 +50,7 @@ export const ListComponent = observer((): JSX.Element => {
   return (
     <BlogListContent>
       {blogs && blogs.map((blog) => (
-        <BlogItem key={blog._id} blog={blog} source={TrackerSources.MOBX_V1} />
+        <BlogItem key={blog._id} blog={toJS(blog)} source={TrackerSources.MOBX_V1} />
       ))}
     </BlogListContent>
   );

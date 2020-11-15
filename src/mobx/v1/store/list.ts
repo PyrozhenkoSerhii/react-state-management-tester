@@ -78,52 +78,50 @@ class BlogListState {
       time: Date.now(),
     });
 
-    runInAction(() => {
-      const filters = this.filters.map((filter) => {
-        if (filter.title !== title) return filter;
-        const updated = filter;
+    const filters = this.filters.map((filter) => {
+      if (filter.title !== title) return filter;
+      const updated = filter;
 
-        if (isBooleanFilter(updated)) {
-          updated.value = !updated.value;
-        } else if (isValueFilter(updated)) {
-          updated.value = Number(value);
-        } else if (isRangeFilter(updated)) {
-          updated.min = Number(value);
-          updated.max = Number(secondValue);
-        }
+      if (isBooleanFilter(updated)) {
+        updated.value = !updated.value;
+      } else if (isValueFilter(updated)) {
+        updated.value = Number(value);
+      } else if (isRangeFilter(updated)) {
+        updated.min = Number(value);
+        updated.max = Number(secondValue);
+      }
 
-        return updated;
+      return updated;
+    });
+
+    if (value) {
+      // we've added a new filter, can use current blogs
+      TrackerService.setTimeStamps({
+        source: TrackerSources.MOBX_V1,
+        position: TrackerPositions.MOBX_ACTION_COMMIT,
+        action: TrackerActions.CHECKBOX_FILTER,
+        state: "started",
+        time: Date.now(),
       });
 
-      if (value) {
-        // we've added a new filter, can use current blogs
-        TrackerService.setTimeStamps({
-          source: TrackerSources.MOBX_V1,
-          position: TrackerPositions.MOBX_ACTION_COMMIT,
-          action: TrackerActions.CHECKBOX_FILTER,
-          state: "started",
-          time: Date.now(),
-        });
+      mutationFilter(this.blogs, (blog) => isBlogPasses(blog, filters));
 
-        mutationFilter(this.blogs, (blog) => isBlogPasses(blog, filters));
-
-        this.filters = filters;
-      } else {
-        // we've removed some of the filters. Have to use default blogs
-        const blogs = this.defaultBlogs.map(
-          (blog) => (isBlogPasses(blog, filters) ? blog : null),
-        ).filter(Boolean);
-        TrackerService.setTimeStamps({
-          source: TrackerSources.MOBX_V1,
-          position: TrackerPositions.MOBX_ACTION_COMMIT,
-          action: TrackerActions.CHECKBOX_FILTER,
-          state: "started",
-          time: Date.now(),
-        });
-        this.blogs = blogs;
-        this.filters = filters;
-      }
-    });
+      this.filters = filters;
+    } else {
+      // we've removed some of the filters. Have to use default blogs
+      const blogs = this.defaultBlogs.map(
+        (blog) => (isBlogPasses(blog, filters) ? blog : null),
+      ).filter(Boolean);
+      TrackerService.setTimeStamps({
+        source: TrackerSources.MOBX_V1,
+        position: TrackerPositions.MOBX_ACTION_COMMIT,
+        action: TrackerActions.CHECKBOX_FILTER,
+        state: "started",
+        time: Date.now(),
+      });
+      this.blogs = blogs;
+      this.filters = filters;
+    }
   }
 }
 
