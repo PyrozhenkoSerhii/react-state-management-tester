@@ -1,4 +1,3 @@
-/* eslint-disable react/static-property-placement */
 import { observable, action } from "mobx";
 import { createContext } from "react";
 
