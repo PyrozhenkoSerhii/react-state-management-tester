@@ -45,7 +45,7 @@ trackerRouter.post(API.TRACKER_REDUX, async (req: TypedRequest<ReduxOperation>, 
 
     existing.save();
 
-    return res.sendStatus(201);
+    return res.status(201).send({ updated: existing });
   }
 
   const tracker: ITracker<ReduxOperationTime> = {
@@ -59,7 +59,7 @@ trackerRouter.post(API.TRACKER_REDUX, async (req: TypedRequest<ReduxOperation>, 
 
   new TrackerModel(tracker).save();
 
-  return res.sendStatus(201);
+  return res.status(201).send({ new: tracker });
 });
 
 trackerRouter.post(API.TRACKER_REDUX_SAGA, async (
@@ -96,7 +96,7 @@ trackerRouter.post(API.TRACKER_REDUX_SAGA, async (
 
     existing.save();
 
-    return res.sendStatus(201);
+    return res.status(201).send({ updated: existing });
   }
 
   const tracker: ITracker<ReduxSagaOperationTime> = {
@@ -110,7 +110,7 @@ trackerRouter.post(API.TRACKER_REDUX_SAGA, async (
 
   new TrackerModel(tracker).save();
 
-  return res.sendStatus(201);
+  return res.status(201).send({ new: tracker });
 });
 
 trackerRouter.post(API.TRACKER_MOBX, async (
@@ -143,7 +143,7 @@ trackerRouter.post(API.TRACKER_MOBX, async (
 
     existing.save();
 
-    return res.sendStatus(201);
+    return res.status(201).send({ updated: existing });
   }
 
   const tracker: ITracker<MobxOperationTime> = {
@@ -157,7 +157,7 @@ trackerRouter.post(API.TRACKER_MOBX, async (
 
   new TrackerModel(tracker).save();
 
-  return res.sendStatus(201);
+  return res.status(201).send({ new: tracker });
 });
 
 trackerRouter.post(API.TRACKER_CONTEXT, async (
@@ -194,7 +194,7 @@ trackerRouter.post(API.TRACKER_CONTEXT, async (
 
     existing.save();
 
-    return res.sendStatus(201);
+    return res.status(201).send({ updated: existing });
   }
 
   const tracker: ITracker<ContextOperationTime> = {
@@ -208,7 +208,7 @@ trackerRouter.post(API.TRACKER_CONTEXT, async (
 
   new TrackerModel(tracker).save();
 
-  return res.sendStatus(201);
+  return res.status(201).send({ new: tracker });
 });
 
 trackerRouter.get(API.TRACKER, async (req: Request, res: Response) => {

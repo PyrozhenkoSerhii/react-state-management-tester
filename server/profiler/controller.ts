@@ -36,11 +36,9 @@ profilerRouter.post(API.PROFILER, async (req: TypedRequest<ProfilerRequest>, res
 
     existing.attempts += 1;
 
-    console.log("Updated profiler: ", existing);
-
     existing.save();
 
-    return res.sendStatus(201);
+    return res.status(201).send({ updated: existing });
   }
 
   const profiler: IProfilerData = {
@@ -51,7 +49,7 @@ profilerRouter.post(API.PROFILER, async (req: TypedRequest<ProfilerRequest>, res
 
   new ProfilerModel(profiler).save();
 
-  return res.sendStatus(201);
+  return res.status(201).send({ new: profiler });
 });
 
 profilerRouter.get(API.PROFILER, async (req: Request, res: Response) => {
